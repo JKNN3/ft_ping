@@ -48,4 +48,20 @@ As far as why both exist, inetutils is the GNU networking utilities, targeting a
   broadcast ip 
 L'adresse de broadcast est une adresse IP qui termine en . 255 dans des réseaux de classe A, B ou C, cette adresse est celle qui permet de faire de la diffusion à toutes les machines du réseau. Ainsi, quand on veut envoyer une information à toutes les machines, on utilise cette adresse.
 
+  damn ca a l'air long mais interessant
 
+https://gursimarsm.medium.com/customizing-icmp-payload-in-ping-command-7c4486f4a1be
+
+The output of ping from windows machine which by default sends 4 packets and stop.
+The output of ping from Linux machine which by default continue pinging until ctrl+c is pressed to cancel.
+
+on peut pas target de ports
+
+comprendre ce que sonr exactement bits frame packets datagram
+
+"Clarify PADDING vs PING frames"
+https://www.baeldung.com/cs/networking-packet-fragment-frame-datagram-segment
+
+
+
+https://github.com/quicwg/base-drafts/issues/838
