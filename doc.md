@@ -32,12 +32,15 @@ socket() crée un point de communication, et renvoie un descripteur.
 http://manpagesfr.free.fr/man/man7/packet.7.html
 
 
-
-- difference between iputils's ping and inetutils's ping
+  difference between iputils's ping and inetutils's ping
 https://unix.stackexchange.com/questions/400351/what-are-the-differences-between-iputils-ping-and-inetutils-ping
+
+(iputils's ping has more features but work only under linux unlike nuetutils's ping which works just as well under windows)
 
 iputils’s ping supports quite a few more features than inetutils’ ping, e.g. IPv6 (which inetutils implements in a separate binary, ping6), broadcast pings, quality of service bits... The linked manpages provide details.
 
 iputils’ ping supports all the options available on inetutils’ ping, so scripts written for the latter will work fine with the former. The reverse is not true: scripts using iputils-specific options won’t work with inetutils.
 
 As far as why both exist, inetutils is the GNU networking utilities, targeting a variety of operating systems and providing lots of different networking tools; iputils is Linux-specific and includes fewer utilities. So typically you’d combine both to obtain complete coverage and support for Linux-specific features, on Linux, and only use inetutils on non-Linux systems.
+
+
