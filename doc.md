@@ -72,3 +72,6 @@ When a client searches for a hostname—typically through a web browser—their 
 
 
 sscanf() pour le parsing trooop bien!!
+
+
+https://github.com/dgibson/iputils/blob/master/ping_common.c
