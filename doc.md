@@ -21,7 +21,7 @@ In a Smurf attack, the attacker sends an ICMP packet with a spoofed source IP ad
 #include <icmp.h>
 https://sites.uclouvain.be/SystInfo/usr/include/linux/icmp.h.html
 
-ping implementation from inetutils-2.0
+**ping implementation from inetutils-2.0**
 
 https://manpages.debian.org/stretch/inetutils-ping/ping.1.en.html
 
