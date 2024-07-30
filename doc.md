@@ -65,3 +65,10 @@ https://www.baeldung.com/cs/networking-packet-fragment-frame-datagram-segment
 
 
 https://github.com/quicwg/base-drafts/issues/838
+
+
+When a client searches for a hostname—typically through a web browser—their network’s DNS provider executes a multi-step resolution process via the following four servers in order to find and return the appropriate IP address:
+
+
+
+sscanf() pour le parsing trooop bien!!
