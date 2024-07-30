@@ -91,3 +91,4 @@ b = 0000 1101
 * ⁓ (bitwise compliment) -> invert bits
   * ~a  = 1100 0011
 
+https://youtu.be/jxZ9qXtOt7o?si=-jHDpPYc_HNu0fsb
