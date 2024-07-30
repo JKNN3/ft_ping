@@ -83,13 +83,13 @@ a = 0011 1100
 b = 0000 1101
 
 & (bitwise and)	-> if the bit is present in both, is 1, else is 0
--a&b = 0000 1100
+- a&b = 0000 1100
 
 | (bitwise or)	-> every bits present in both numbers
--a|b = 0011 1101
+- a|b = 0011 1101
 
 ^ (bitwise XOR)	-> if bit is present in one of the 'numbers' not in both
--a^b = 0011 0001
+- a^b = 0011 0001
 
 ⁓ (bitwise compliment) -> invert bits
 - ~a  = 1100 0011
