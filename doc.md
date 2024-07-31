@@ -92,3 +92,7 @@ b = 0000 1101
   * ~a  = 1100 0011
 
 https://youtu.be/jxZ9qXtOt7o?si=-jHDpPYc_HNu0fsb
+
+
+regex:
+https://info2html.sourceforge.net/cgi-bin/info2html-demo/info2html?(libc)Regular%2520Expressions
