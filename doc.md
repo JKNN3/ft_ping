@@ -102,3 +102,6 @@ https://www.youtube.com/watch?v=F83ZvOKj2BU
 
 
 a regarder: https://www.youtube.com/watch?v=RnpSaDSSjR4
+
+utile:
+https://ram-0000.developpez.com/tutoriels/reseau/ICMP/
