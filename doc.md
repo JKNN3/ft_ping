@@ -99,6 +99,15 @@ regex:
 https://info2html.sourceforge.net/cgi-bin/info2html-demo/info2html?(libc)Regular%2520Expressions
 
 
+https://www.youtube.com/watch?v=F83ZvOKj2BU
+
+
+a regarder: https://www.youtube.com/watch?v=RnpSaDSSjR4
+
+utile:
+https://ram-0000.developpez.com/tutoriels/reseau/ICMP/
+
+
 calculate the checksum:
 
 https://forum.microchip.com/s/topic/a5C3l000000LxmDEAS/t221513
