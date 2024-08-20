@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "types.h": "c",
+        "in.h": "c",
+        "ip.h": "c",
+        "socket.h": "c",
+        "cdefs.h": "c",
+        "netdb.h": "c",
+        "stdio.h": "c",
+        "ip_icmp.h": "c"
+    }
+}

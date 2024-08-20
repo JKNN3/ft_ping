@@ -34,6 +34,7 @@ http://manpagesfr.free.fr/man/man7/packet.7.html
 
   difference between iputils's ping and inetutils's ping
 https://unix.stackexchange.com/questions/400351/what-are-the-differences-between-iputils-ping-and-inetutils-ping
+/what-are-the-differences-between-iputils-ping-and-inetutils-ping
 
 (iputils's ping has more features but work only under linux unlike nuetutils's ping which works just as well under windows)
 
@@ -96,3 +97,8 @@ https://youtu.be/jxZ9qXtOt7o?si=-jHDpPYc_HNu0fsb
 
 regex:
 https://info2html.sourceforge.net/cgi-bin/info2html-demo/info2html?(libc)Regular%2520Expressions
+
+
+calculate the checksum:
+
+https://forum.microchip.com/s/topic/a5C3l000000LxmDEAS/t221513
