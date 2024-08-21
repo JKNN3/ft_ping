@@ -17,10 +17,23 @@ int main(int argc, char **argv){
 
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
+    hints.ai_flags = AI_CANONNAME;
 
     int ret = getaddrinfo(argv[1], NULL, &hints, &res);
-
-    printf("res addrinfo:\nai_flags: %d\nai_family: %d\nai_socktype: %d\nai_protocol: %d\nai_addrlen: %d\nai_canonname: %s\n", res->ai_flags, res->ai_family, res->ai_socktype, res->ai_protocol, res->ai_addrlen, res->ai_canonname);
+    char addrstr[100];
+    void *addr;
+    // struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+    // addr = &((struct sockaddr_in *)p->ai_addr)sin_addr;
+        // inet_ntop : This function converts the network address structure src in the af address family into a character string.
+    // test0 = &((struct sockaddr_in *) res->ai_addr)->sin_addr;
+    
+    // ca maaaarche ahaha
+    inet_ntop (res->ai_family, &((struct sockaddr_in *)res->ai_addr)->sin_addr, addrstr, 100);
+      printf ("IPv%d address: %s (%s)\n", res->ai_family == PF_INET6 ? 6 : 4,
+              addrstr, res->ai_canonname);
+    
+    printf("res = %d\n", ret);
+    printf("res addrinfo:\nai_flags: %d\nai_family: %d\nai_socktype: %d\nai_protocol: %d\nai_addrlen: %d\nai_addr->sa_data: %s\nai_canonname: %s\n", res->ai_flags, res->ai_family, res->ai_socktype, res->ai_protocol, res->ai_addrlen, addrstr, res->ai_canonname);
     int sockfd = socket(PF_INET, SOCK_RAW, IPPROTO_ICMP);
 
     // sendto(fd of the sending socket, message, msg len, flags, sockaddr du destinataire recup avec getaddrinfo, len de l'addr);
@@ -52,26 +65,27 @@ int main(int argc, char **argv){
 }
 
 void    fill_ip_header(struct ip *ip_header){
-    // ip_header.ip_tos = type_of_service
-    // ip_header.ip_len =
-    // ip_header.ip_id = 
-    // ip_header.ip_off =
-    // ip_header.ip_ttl = 
-    // ip_header.ip_p = protocol
-    // ip_header.ip_sum = compute_checksum(); // -> u_short () 2 bytes
-    // ip_header.ip_src = 
-    // ip_header.ip_dest = // struct in_addr 
+    // ip_header->ip_tos = type_of_service
+    // ip_header->ip_len =
+    // ip_header->ip_id = 
+    // ip_header->ip_off =
+    // ip_header->ip_ttl = 
+    // ip_header->ip_p = protocol
+    // ip_header->ip_sum = compute_checksum(); // -> u_short () 2 bytes
+    // ip_header->ip_src = 
+    // ip_header->ip_dest = // struct in_addr 
                         // in_addr_t is equivalent to the type uint32_t as defined in <inttypes.h> .
                         // use https://stackoverflow.com/questions/76940582/why-struct-in-addr-is-needed
 }
 
 void    fill_icmp_message(struct icmp *icmp_message){
-    icmp_message.icmp_type = ICMP_ECHO;
-    icmp_message.icmp_code = 0;
+    icmp_message->icmp_type = ICMP_ECHO;
+    icmp_message->icmp_code = 0;
     // icmp_message.icmp_cksum = compute_checksum(); // -> u_int16_t 2 bytes
 }
 
 u_short compute_checksum(){
+    return (0);
 }
 
 void    send_echo_request_packet(){

@@ -1,6 +1,8 @@
 **checksum:** petite quantité de données calculée à partir d'une plus grosse quantité de données. Permett la verification de l'intégrité des données (très bonne fidélité). Souvent utilisé apres une transmission, une copie, un stockage.
 
 getaddrinfo()
+https://gist.github.com/jirihnidek/bf7a2363e480491da72301b228b35d5d
+
 getnameinfo()
 
 https://www.developpez.net/forums/d4485/c-cpp/c/reseau/raw-socket-forger-propre-packet-icmp-pinge/

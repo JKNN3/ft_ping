@@ -125,3 +125,15 @@ struct ip https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip.h.html
 struct icmp https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip_icmp.h.html
 
 https://fr.wikipedia.org/wiki/IPv4
+
+
+pas de magic number = faire des define pour la clarté du code
+  https://en.wikipedia.org/wiki/Magic_number_(programming)
+
+
+
+ECHO_REPLY
+
+https://www.firewall.cx/networking/network-protocols/icmp-protocol/icmp-echo-ping.html
+
+https://networklessons.com/cisco/ccna-routing-switching-icnd1-100-105/icmp-internet-control-message-protocol
