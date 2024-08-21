@@ -107,7 +107,21 @@ a regarder: https://www.youtube.com/watch?v=RnpSaDSSjR4
 utile:
 https://ram-0000.developpez.com/tutoriels/reseau/ICMP/
 
+ ** -> An efficient checksum implementation is critical to good performance.**
+  a fraction of a microsecond per TCP data byte can add up to a significant CPU time savings
+  overall. 
+      -> trouver comment opti le machin
 
-calculate the checksum:
-
+calculate ICMP checksum:
 https://forum.microchip.com/s/topic/a5C3l000000LxmDEAS/t221513
+http://www.faqs.org/rfcs/rfc1071.html
+
+compute IP checksum:
+https://www.thegeekstuff.com/2012/05/ip-header-checksum/
+
+jeannneeeee 1 octet 1 byte 8 bits
+
+struct ip https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip.h.html
+struct icmp https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip_icmp.h.html
+
+https://fr.wikipedia.org/wiki/IPv4
