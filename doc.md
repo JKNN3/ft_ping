@@ -124,16 +124,53 @@ jeannneeeee 1 octet 1 byte 8 bits
 struct ip https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip.h.html
 struct icmp https://sites.uclouvain.be/SystInfo/usr/include/netinet/ip_icmp.h.html
 
+time to live
+Everytime an IP packet passes through a router, the time to live field is decremented by 1. Once it hits 0 the router will drop the packet and sends an ICMP time exceeded message to the sender
+
+ip header length
+The minimum length of an IP header is 20 bytes so with 32 bit increments, you would see value of 5 here. The maximum value we can create with 4 bits is 15 so with 32 bit increments, that would be a header length of 60 bytes. This field is also called the Internet Header Length (IHL).
+
+ip_src et ip_dest sont de type
+          struct in_addr {
+              uint32_t       s_addr;     /* address in network byte order */
+          };
+    alors que getaddrinfo nous return
+                struct sockaddr {
+                    sa_family_t     sa_family;      /* Address family */
+                    char            sa_data[];      /* Socket address */
+                };
+      je fais quoi de tout ca moi??
+
+Network byte order :emoji_sunglasses:
+  The network byte order is defined to always be big-endian, which may differ from the host byte order on a particular machine. Using network byte ordering for data exchanged between hosts allows hosts using different architectures to exchange address information without confusion because of byte ordering. The following C functions allow the application program to switch numbers easily back and forth between the host byte order and network byte order without having to first know what method is used for the host byte order:
+
+      htonl() translates an unsigned long integer into network byte order.
+      htons() translates an unsigned short integer into network byte order.
+      ntohl() translates an unsigned long integer into host byte order.
+      ntohs() translates an unsigned short integer into host byte order.
+
+tropcool:
+inet_aton() converts the Internet host address cp from the IPv4 numbers-and-dots notation into binary form (in network byte order) and stores it in the structure that inp points to. 
+
+timestamp explained:
+https://stackoverflow.com/questions/70175164/icmp-timestamps-added-to-ping-echo-requests-in-linux-how-are-they-represented-t
+
+
+
 https://fr.wikipedia.org/wiki/IPv4
 
 
 pas de magic number = faire des define pour la clarté du code
   https://en.wikipedia.org/wiki/Magic_number_(programming)
 
-
+epoll pour le flood et -i
 
 ECHO_REPLY
 
 https://www.firewall.cx/networking/network-protocols/icmp-protocol/icmp-echo-ping.html
 
 https://networklessons.com/cisco/ccna-routing-switching-icnd1-100-105/icmp-internet-control-message-protocol
+
+
+lire tt les commentaires et le code:
+https://github.com/dspinellis/unix-history-repo/blob/BSD-4_3/usr/src/etc/ping.c#L233

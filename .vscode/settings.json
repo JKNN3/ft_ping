@@ -7,6 +7,8 @@
         "cdefs.h": "c",
         "netdb.h": "c",
         "stdio.h": "c",
-        "ip_icmp.h": "c"
+        "ip_icmp.h": "c",
+        "regex.h": "c",
+        "stdlib.h": "c"
     }
 }

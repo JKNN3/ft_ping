@@ -13,8 +13,6 @@ int main(int argc, char **argv){
 
     printf("sizeof ip_header: %lu\nsizeof icmp: %lu\n",sizeof(ip_header),sizeof(icmp_));
 
-    //
-
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_flags = AI_CANONNAME;
@@ -65,28 +63,36 @@ int main(int argc, char **argv){
 }
 
 void    fill_ip_header(struct ip *ip_header){
-    // ip_header->ip_tos = type_of_service
-    // ip_header->ip_len =
-    // ip_header->ip_id = 
-    // ip_header->ip_off =
-    // ip_header->ip_ttl = 
-    // ip_header->ip_p = protocol
+    // ip_header->ip_hl = IP_HEADER_LEN;
+    // ip_header->ip_v = 4;
+    // ip_header->ip_tos = 0;   //type_of_service
+    // ip_header->ip_len = IP_HEADER_LEN;
+    // ip_header->ip_id = 0; // ??
+    // ip_header->ip_off = 0; // ????
+    // ip_header->ip_ttl = TIME_TO_LIVE
+    // ip_header->ip_p = IPPROTO_ICMP ;
     // ip_header->ip_sum = compute_checksum(); // -> u_short () 2 bytes
-    // ip_header->ip_src = 
-    // ip_header->ip_dest = // struct in_addr 
+    // ip_header->ip_src = INADDR_ANY;
+    // ip_header->ip_dest = 0;
+    // inet_aton(addrstr, ip_header->ip_dest);
+                         // struct in_addr 
                         // in_addr_t is equivalent to the type uint32_t as defined in <inttypes.h> .
                         // use https://stackoverflow.com/questions/76940582/why-struct-in-addr-is-needed
 }
 
 void    fill_icmp_message(struct icmp *icmp_message){
     icmp_message->icmp_type = ICMP_ECHO;
-    icmp_message->icmp_code = 0;
+    icmp_message->icmp_code = ICMP_ECHOREPLY;
     // icmp_message.icmp_cksum = compute_checksum(); // -> u_int16_t 2 bytes
+    // icmp_message->icd_id = ;
+    // icmp_message->icd_seq= ;
+    // timestamp
+    // data (40 bytes)
 }
 
 u_short compute_checksum(){
     return (0);
-}
+}                                                                            
 
 void    send_echo_request_packet(){
     // fill_ip_header();
@@ -102,5 +108,9 @@ void    check_received_packet(){
 }
 
 void    print_statistics(){
-
+    //     unix-history-repo/usr/src/etc/ping.c line 416:
+    // Heavily buffered STDIO is used here, so that all the statistics
+    // will be written with 1 sys-write call.  This is nice when more
+    // than one copy of the program is running on a terminal;  it prevents
+    // the statistics output from becomming intermingled.
 }
