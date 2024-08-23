@@ -62,34 +62,31 @@ int main(int argc, char **argv){
     return (0);
 }
 
-void    fill_ip_header(struct ip *ip_header){
+void    fill_ip_header(struct ip *ip_header, char dest_str[100]){
     // ip_header->ip_hl = IP_HEADER_LEN;
-    // ip_header->ip_v = 4;
-    // ip_header->ip_tos = 0;   //type_of_service
-    // ip_header->ip_len = IP_HEADER_LEN;
+    // ip_header->ip_v = IP_VERSION;
+    // ip_header->ip_tos = 0;
+    // ip_header->ip_len = IP_TOTAL_LEN;
 
     // ip_header->ip_id = 0; // ??
 
-    // ip_header->ip_off = 0; // ????
-    //  010
+    // ip_header->ip_off = SET_DONT_FRAGMENT_BIT_TRUE ;
     // ip_header->ip_ttl = TIME_TO_LIVE
     // ip_header->ip_p = IPPROTO_ICMP ;
     // ip_header->ip_sum = compute_checksum(); // -> u_short () 2 bytes
     // ip_header->ip_src = INADDR_ANY;
-    // ip_header->ip_dest = 0;
-    // inet_aton(addrstr, ip_header->ip_dest);
-                         // struct in_addr 
-                        // in_addr_t is equivalent to the type uint32_t as defined in <inttypes.h> .
-                        // use https://stackoverflow.com/questions/76940582/why-struct-in-addr-is-needed
+    // inet_aton(dest_str, ip_header->ip_dest.s_addr); // check les erreurs
 }
 
 void    fill_icmp_message(struct icmp *icmp_message){
     icmp_message->icmp_type = ICMP_ECHO;
     icmp_message->icmp_code = ICMP_ECHOREPLY;
     // icmp_message.icmp_cksum = compute_checksum(); // -> u_int16_t 2 bytes
-    // icmp_message->icd_id = ;
-    // icmp_message->icd_seq= ;
-    // timestamp
+    // icmp_message->icd_id = ; // mike muss did : in = getpid() & 0xFFFF pour avoir juste les 16 derniers bits
+                                // car c'est un u_int_16. C'est important poiur l'identification du paquet retour;
+    // icmp_message->icd_seq= ; // nombre de paquets transmis, a ++ quand on envoie un paquet, struct principale.
+
+    // timestamp ? clock_gettime()
     // data (40 bytes)
 }
 
