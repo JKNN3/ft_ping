@@ -130,6 +130,9 @@ Everytime an IP packet passes through a router, the time to live field is decrem
 ip header length
 The minimum length of an IP header is 20 bytes so with 32 bit increments, you would see value of 5 here. The maximum value we can create with 4 bits is 15 so with 32 bit increments, that would be a header length of 60 bytes. This field is also called the Internet Header Length (IHL).
 
+ip id field:
+The Identification field (16 bits) is populated with an ID number unique for the combination of source & destination addresses and Protocol field value of the original packet, allowing the destination to distinguish between the fragments of different packets (from the same source). This does not mean the same ID should be used when fragmenting packets where the source, destination and protocol are the same but that the same ID could be used when they are not.
+
 ip_src et ip_dest sont de type
           struct in_addr {
               uint32_t       s_addr;     /* address in network byte order */

@@ -67,8 +67,11 @@ void    fill_ip_header(struct ip *ip_header){
     // ip_header->ip_v = 4;
     // ip_header->ip_tos = 0;   //type_of_service
     // ip_header->ip_len = IP_HEADER_LEN;
+
     // ip_header->ip_id = 0; // ??
+
     // ip_header->ip_off = 0; // ????
+    //  010
     // ip_header->ip_ttl = TIME_TO_LIVE
     // ip_header->ip_p = IPPROTO_ICMP ;
     // ip_header->ip_sum = compute_checksum(); // -> u_short () 2 bytes
