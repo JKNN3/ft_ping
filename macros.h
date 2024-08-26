@@ -5,7 +5,8 @@
 # define IP_VERSION                      4
 # define IP_TOTAL_LEN                   20          // in bytes
 # define TIME_TO_LIVE                   64
-# define SET_DONT_FRAGMENT_BIT_TRUE     (1 << 14)   //set the dont fragment bit (bit 01) to true
+# define ICMP_HEADER_LEN                
+# define SET_DONT_FRAGMENT_BIT_TO_TRUE     (1 << 14)   //set the dont fragment bit (bit 01) to true
 
 
 #endif
