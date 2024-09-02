@@ -35,15 +35,15 @@ int main(int argc, char **argv){
     printf("sockfd fd: %d\n", sockfd);
 
     // sendto(fd of the sending socket, message, msg len, flags, sockaddr du destinataire recup avec getaddrinfo, len de l'addr);
-    char test[50];
-    char *ptr = &test[0];
-    for (int i = 0; i < 50; i++){
-        test[i] = 'a';
-    }
-    test[49] = '\0';
-    printf("test normal: %s\n", ptr);
-    ptr+=40;
-    printf("test +40 : %s\n", ptr);
+    // char test[50];
+    // char *ptr = &test[0];
+    // for (int i = 0; i < 50; i++){
+    //     test[i] = 'a';
+    // }
+    // test[49] = '\0';
+    // printf("test normal: %s\n", ptr);
+    // ptr+=40;
+    // printf("test +40 : %s\n", ptr);
 
     // sendto takes a const void buffer so i need to fill something being the size of my full packet
     //  i can use cast if i need it to be my struct ip or icmp msg.
@@ -60,12 +60,33 @@ int main(int argc, char **argv){
     // need a struct to store the informations that ping display at the end
 
     static char packet[IP_HEADER_LEN + ICMP_MSG_LEN];
-    print_memory(packet);
     memset(packet, 0, sizeof(packet));
+    unsigned char data;
+
     fill_ip_header((struct ip*)&packet, addrstr);
-    print_memory(packet);
-    fill_icmp_message((struct icmp*)(&packet + IP_HEADER_LEN));
-    print_memory(packet);
+
+
+    // for (int i = 0; i < sizeof(packet); i++){ // print in hexa
+    //     if (i % 4 == 0)
+    //         printf ("\n");
+    //     data = ((unsigned char*)&packet)[i];
+    //     printf("%02x ", data);
+    // }
+    // printf ("\n");
+
+    fill_icmp_message((struct icmp*)(&packet[IP_HEADER_LEN]));
+
+    for (int i = 0; i < sizeof(packet); i++){ // print in hexa
+        if (i % 8 == 0)
+            printf ("  ");
+        if (i % 16 == 0)
+            printf ("\n");
+        data = ((unsigned char*)&packet)[i];
+        printf("%02x ", data);
+    }
+    printf ("\n");
+
+
     int send_status = sendto(sockfd, (void*)packet, PACKET_LEN, 0, (const struct sockaddr*)res->ai_addr, (socklen_t)(sizeof(res->ai_addr)));
     if (send_status < 0)
         perror("send status ");
@@ -98,7 +119,10 @@ void    fill_icmp_message(struct icmp *icmp_message){
 /* 2 bytes*/    icmp_message->icmp_id = 0; // mike muss did : in = getpid() & 0xFFFF pour avoir juste les 16 derniers bits
                                 // car c'est un u_int_16. C'est important poiur l'identification du paquet retour;
 /* 2 bytes*/    icmp_message->icmp_seq= 0; // nombre de paquets transmis, a ++ quand on envoie un paquet, struct principale.
-/* 16 bytes */  gettimeofday((void *)icmp_message /*+ ICMP_HEADER_LEN*/, NULL); //check ça  
+/* 16 bytes */  int ret_gettime = gettimeofday((struct timeval *)&(icmp_message[8]), NULL); //check ça  
+                printf("gettime return: %d\n", ret_gettime);
+
+
 /* payload 40 bytes */
                 icmp_message->icmp_cksum = compute_checksum((void *)icmp_message, ICMP_HEADER_LEN); // -> u_int16_t 2 bytes mais quand on a fini de remplir la struct huh
 }
