@@ -19,40 +19,39 @@ fd 7f 00 00 (inverted bcs little endian so bytes (and not bits) are inverted)
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct {
-    int     test;       // 4 bytes
-    char    k;          // 1
-    char    str[10];    // 10
-    int     *p;         // 8
-    short   sh;         // 2
-} t_thing;      // total : 25 bytes but we have 32 for memory alignment
+// typedef struct {
+//     int     test;       // 4 bytes
+//     char    k;          // 1
+//     char    str[10];    // 10
+//     int     *p;         // 8
+//     short   sh;         // 2
+// } t_thing;      // total : 25 bytes but we have 32 for memory alignment
 
-int main(int agrc, char **argv){
+int print_memory(char *memory){
     int i;
-    t_thing t = {12, 'k', "testing", &i, 12};
-    printf("sizeof t: %lu\n", sizeof(t));
+    printf("sizeof t: %lu\n", sizeof(memory));
     unsigned char data;
-    for (i = 0; i < sizeof(t); i++){ // print in hexa
+    for (i = 0; i < sizeof(memory); i++){ // print in hexa
         if (i % 4 == 0)
             printf ("\n");
-        data = ((unsigned char*)&t)[i];
+        data = ((unsigned char*)&memory)[i];
         printf("%02x ", data);
     }
     printf ("\n");
 
-    for (i = 0; i < sizeof(t); i++){ // print in decimal
-        if (i % 4 == 0)
-            printf ("\n");
-        data = ((unsigned char*)&t)[i];
-        printf("%03hhu ", data);
-    }
-    printf ("\n");
-    for (i = 0; i < sizeof(t); i++){ // print in characters
-        if (i % 4 == 0)
-            printf ("\n");
-        data = ((unsigned char*)&t)[i];
-        printf("%c ", data);
-    }
-    printf ("\n");
+    // for (i = 0; i < sizeof(memory); i++){ // print in decimal
+    //     if (i % 4 == 0)
+    //         printf ("\n");
+    //     data = ((unsigned char*)&memory)[i];
+    //     printf("%03hhu ", data);
+    // }
+    // printf ("\n");
+    // for (i = 0; i < sizeof(memory); i++){ // print in characters
+    //     if (i % 4 == 0)
+    //         printf ("\n");
+    //     data = ((unsigned char*)&memory)[i];
+    //     printf("%c ", data);
+    // }
+    // printf ("\n");
     return 0; 
 }

@@ -9,6 +9,9 @@
         "stdio.h": "c",
         "ip_icmp.h": "c",
         "regex.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "macros.h": "c",
+        "time.h": "c",
+        "inet.h": "c"
     }
 }
