@@ -151,9 +151,25 @@ ip_src et ip_dest sont de type
                     sa_family_t     sa_family;      /* Address family */
                     char            sa_data[];      /* Socket address */
                 };
-      je fais quoi de tout ca moi??
+                
+sockaddr is a generic struct, which is shared by different types of sockets. For TCP/IP sockets this struct becomes sockaddr_in (IPv4) or sockaddr_in6 (IPv6). For unix sockets it becomes sockaddr_un.
 
-Network byte order :emoji_sunglasses:
+Ideally you would use sockaddr_in instead of sockaddr.
+
+But given sockaddr, you could do this to extract IP address from it:
+
+sockaddr foo;
+in_addr ip_address = ((sockaddr_in)foo).sin_addr;
+or
+in_addr_t ip_address = ((sockaddr_in)foo).sin_addr.s_addr;
+
+If you look inside sockaddr_in you will see that the first 2 bytes of sa_data are the port number. And the next 4 bytes are the IP address.
+
+PS: Please note that the IP address is stored in network byte order, so you will probably need to use ntohl (network-to-host) and htonl (host-to-network) to convert to/from host byte order.
+
+
+
+Network byte order 
   The network byte order is defined to always be big-endian, which may differ from the host byte order on a particular machine. Using network byte ordering for data exchanged between hosts allows hosts using different architectures to exchange address information without confusion because of byte ordering. The following C functions allow the application program to switch numbers easily back and forth between the host byte order and network byte order without having to first know what method is used for the host byte order:
 
       htonl() translates an unsigned long integer into network byte order.
@@ -208,3 +224,36 @@ https://networklessons.com/cisco/ccna-routing-switching-icnd1-100-105/icmp-inter
 
 lire tt les commentaires et le code:
 https://github.com/dspinellis/unix-history-repo/blob/BSD-4_3/usr/src/etc/ping.c#L233
+
+
+
+get the ip adress of my machine
+https://www.sanfoundry.com/c-program-get-ip-address/
+using ioctl, 
+SIOCGIFADDR
+For compatibility, SIOCGIFADDR returns only AF_INET addresses
+Get, set, or delete the address of the device using
+              ifr_addr, or ifr6_addr with ifr6_prefixlen.  Setting or
+              deleting the interface address is a privileged operation.
+
+Constant: size_t IFNAMSIZ
+    This constant defines the maximum buffer size needed to hold an interface name, including its terminating zero byte.
+    struct ifreq {
+               char ifr_name[IFNAMSIZ]; /* Interface name */
+               union {
+                   struct sockaddr ifr_addr;
+                   struct sockaddr ifr_dstaddr;
+                   struct sockaddr ifr_broadaddr;
+                   struct sockaddr ifr_netmask;
+                   struct sockaddr ifr_hwaddr;
+                   short           ifr_flags;
+                   int             ifr_ifindex;
+                   int             ifr_metric;
+                   int             ifr_mtu;
+                   struct ifmap    ifr_map;
+                   char            ifr_slave[IFNAMSIZ];
+                   char            ifr_newname[IFNAMSIZ];
+                   char           *ifr_data;
+               };
+           };
+

@@ -16,8 +16,10 @@
 # include <errno.h>
 # include "macros.h"
 # include "regex.h"
+# include <sys/ioctl.h>             // ioctl() and ifreq struct
+# include <net/if.h>                // IFNAMSIZ constant
 
-void    fill_ip_header(struct ip *ip_header, char dest_str[100]);
+void    fill_ip_header(struct ip *ip_header, char dest_str[100], int sockfd);
 void    fill_icmp_message(struct icmp *icmp_message);
 short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
 void    print_memory(char *memory);

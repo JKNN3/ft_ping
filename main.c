@@ -63,16 +63,8 @@ int main(int argc, char **argv){
     memset(packet, 0, sizeof(packet));
     unsigned char data;
 
-    fill_ip_header((struct ip*)&packet, addrstr);
+    fill_ip_header((struct ip*)&packet, addrstr, sockfd);
 
-
-    // for (int i = 0; i < sizeof(packet); i++){ // print in hexa
-    //     if (i % 4 == 0)
-    //         printf ("\n");
-    //     data = ((unsigned char*)&packet)[i];
-    //     printf("%02x ", data);
-    // }
-    // printf ("\n");
 
     fill_icmp_message((struct icmp*)(&packet[IP_HEADER_LEN]));
 
@@ -93,38 +85,58 @@ int main(int argc, char **argv){
     printf("send status: %d\n", send_status);
     printf("caca\n");
     freeaddrinfo(res);
+    close(sockfd);
     return (0);
 }
 
-void    fill_ip_header(struct ip *ip_header, char dest_str[100]){
-    ip_header->ip_hl = IP_HEADER_LEN_IN_32BITS_INCREMENT;
-    ip_header->ip_v = IP_VERSION;
-    ip_header->ip_tos = 0;
-    ip_header->ip_len = IP_HEADER_LEN; // htons
-    ip_header->ip_id = 0; // ?? 
-    ip_header->ip_off = SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE; // htons
+
+struct in_addr *get_src_ip_adress(int sockfd){
+    static struct ifreq ifr;  // for interface request (to fill the ip_header ip_src field)
+
+    memset(&ifr, 0, sizeof(ifr));
+    ifr.ifr_addr.sa_family = AF_INET;
+    // strncpy(ifr->ifr_name, "eth0", IFNAMSIZ - 1);
+
+    if (ioctl(sockfd, SIOCGIFADDR, &ifr) >= 0)
+        return (&((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+
+    perror("ioctl request failed getting src ip adress");
+    return (NULL);
+}
+
+void    fill_ip_header(struct ip *ip_header, char dest_str[100], int sockfd){
+/* 4 bits */     ip_header->ip_hl = IP_HEADER_LEN_IN_32BITS_INCREMENT;
+/* 4 bits */     ip_header->ip_v = IP_VERSION;
+/* 1 byte */    ip_header->ip_tos = 0;
+/* 2 bytes*/    ip_header->ip_len = htons(IP_HEADER_LEN);
+    ip_header->ip_id = htons(IP_ID);
+    ip_header->ip_off = htons(SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE);
     ip_header->ip_ttl = TIME_TO_LIVE;
     ip_header->ip_p = IPPROTO_ICMP;
     ip_header->ip_sum = 0;
-//    ip_header->ip_src = INADDR_ANY;
+    if (get_src_ip_adress(sockfd) == NULL)
+        ip_header->ip_src = INADDR_ANY;
     if (!inet_aton(dest_str, &ip_header->ip_dst)) // met ip adresse bon format
         return; // puterror eeeh
     ip_header->ip_sum = compute_checksum((void*)ip_header, IP_HEADER_LEN); // -> u_short () 2 bytes
 }
 
+
 void    fill_icmp_message(struct icmp *icmp_message){
 /* 1 byte */    icmp_message->icmp_type = ICMP_ECHO;
 /* 1 byte */    icmp_message->icmp_code = ICMP_ECHOREPLY;
 /* 2 bytes*/    icmp_message->icmp_cksum = 0;
-/* 2 bytes*/    icmp_message->icmp_id = 0; // mike muss did : in = getpid() & 0xFFFF pour avoir juste les 16 derniers bits
+/* 2 bytes*/    icmp_message->icmp_id = 2; // mike muss did : in = getpid() & 0xFFFF pour avoir juste les 16 derniers bits
                                 // car c'est un u_int_16. C'est important poiur l'identification du paquet retour;
-/* 2 bytes*/    icmp_message->icmp_seq= 0; // nombre de paquets transmis, a ++ quand on envoie un paquet, struct principale.
-/* 16 bytes */  int ret_gettime = gettimeofday((struct timeval *)&(icmp_message[8]), NULL); //check ça  
+/* 2 bytes*/    icmp_message->icmp_seq= 3; // nombre de paquets transmis, a ++ quand on envoie un paquet, struct principale.
+
+                void *icmp_timeval = (void*)icmp_message + ICMP_HEADER_LEN;
+/* 16 bytes */  int ret_gettime = gettimeofday((struct timeval *)icmp_timeval, NULL); //check ça  
                 printf("gettime return: %d\n", ret_gettime);
+                icmp_message->icmp_cksum = compute_checksum((void *)icmp_message, ICMP_HEADER_LEN); // -> u_int16_t 2 bytes mais quand on a fini de remplir la struct huh
 
 
 /* payload 40 bytes */
-                icmp_message->icmp_cksum = compute_checksum((void *)icmp_message, ICMP_HEADER_LEN); // -> u_int16_t 2 bytes mais quand on a fini de remplir la struct huh
 }
 
 short compute_checksum(void *packet, int len){ // len = longueur du packet en octets/bytes
