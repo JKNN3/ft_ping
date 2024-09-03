@@ -15,6 +15,7 @@
         "inet.h": "c",
         "ioctl.h": "c",
         "ping.h": "c",
-        "if.h": "c"
+        "if.h": "c",
+        "errno.h": "c"
     }
 }
