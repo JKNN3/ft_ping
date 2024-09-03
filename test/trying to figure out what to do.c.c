@@ -6,31 +6,32 @@ int main(int argc, char **argv){
         return (0);
 
     struct addrinfo hints;
-    struct addrinfo *res;
+    struct addrinfo *res = NULL;
 
     struct ip ip_header; // use ip and not iphdr for portability bcs iphdr is linux-specific
     struct icmp icmp_;
 
     printf("sizeof ip_header: %lu\nsizeof icmp: %lu\n",sizeof(ip_header),sizeof(icmp_));
 
-    memset(&hints, 0, sizeof(hints));
+    memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_family = AF_INET;
     hints.ai_flags = AI_CANONNAME;
 
     int ret = getaddrinfo(argv[1], NULL, &hints, &res);
-    char addrstr[100];
-    void *addr;
-    // struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
-    // addr = &((struct sockaddr_in *)p->ai_addr)sin_addr;
-        // inet_ntop : This function converts the network address structure src in the af address family into a character string.
-    // test0 = &((struct sockaddr_in *) res->ai_addr)->sin_addr;
+    // char addrstr[100];
+    // void *addr;
+    // // struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
+    // // addr = &((struct sockaddr_in *)p->ai_addr)sin_addr;
+    //     // inet_ntop : This function converts the network address structure src in the af address family into a character string.
+    // // test0 = &((struct sockaddr_in *) res->ai_addr)->sin_addr;
 
-    inet_ntop (res->ai_family, &((struct sockaddr_in *)res->ai_addr)->sin_addr, addrstr, 100);
-      printf ("IPv%d address: %s (%s)\n", res->ai_family == PF_INET6 ? 6 : 4,
-              addrstr, res->ai_canonname);
+    // inet_ntop (res->ai_family, &((struct sockaddr_in *)res->ai_addr)->sin_addr, addrstr, 100);
+    //   printf ("IPv%d address: %s (%s)\n", res->ai_family == PF_INET6 ? 6 : 4,
+    //           addrstr, res->ai_canonname);
     
-    printf("res = %d\n", ret);
-    printf("res addrinfo:\nai_flags: %d\nai_family: %d\nai_socktype: %d\nai_protocol: %d\nai_addrlen: %d\nai_addr->sa_data: %s\nai_canonname: %s\n", res->ai_flags, res->ai_family, res->ai_socktype, res->ai_protocol, res->ai_addrlen, addrstr, res->ai_canonname);
+    // printf("res = %d\n", ret);
+    // printf("res addrinfo:\nai_flags: %d\nai_family: %d\nai_socktype: %d\nai_protocol: %d\nai_addrlen: %d\nai_addr->sa_data: %s\nai_canonname: %s\n", res->ai_flags, res->ai_family, res->ai_socktype, res->ai_protocol, res->ai_addrlen, addrstr, res->ai_canonname);
+    
     int sockfd = socket(PF_INET, SOCK_STREAM, 0);
     printf("sockfd fd: %d\n", sockfd);
 
@@ -63,23 +64,23 @@ int main(int argc, char **argv){
     memset(packet, 0, sizeof(packet));
     unsigned char data;
 
-    fill_ip_header((struct ip*)&packet, addrstr, sockfd);
+    fill_ip_header((struct ip*)&packet, res->ai_addr, sockfd);
 
 
     fill_icmp_message((struct icmp*)(&packet[IP_HEADER_LEN]));
 
-    for (int i = 0; i < sizeof(packet); i++){ // print in hexa
-        if (i % 8 == 0)
-            printf ("  ");
-        if (i % 16 == 0)
-            printf ("\n");
-        data = ((unsigned char*)&packet)[i];
-        printf("%02x ", data);
-    }
-    printf ("\n");
+    // for (int i = 0; i < sizeof(packet); i++){ // print in hexa
+    //     if (i % 8 == 0)
+    //         printf ("  ");
+    //     if (i % 16 == 0)
+    //         printf ("\n");
+    //     data = ((unsigned char*)&packet)[i];
+    //     printf("%02x ", data);
+    // }
+    // printf ("\n");
+    socklen_t dest_len = sizeof(res->ai_addr);
 
-
-    int send_status = sendto(sockfd, (void*)packet, PACKET_LEN, 0, (const struct sockaddr*)res->ai_addr, (socklen_t)(sizeof(res->ai_addr)));
+    int send_status = sendto(sockfd, (const void*)&packet, PACKET_LEN/2, 0, res->ai_addr, dest_len);
     if (send_status < 0)
         perror("send status ");
     printf("send status: %d\n", send_status);
@@ -90,21 +91,21 @@ int main(int argc, char **argv){
 }
 
 
-struct in_addr *get_src_ip_adress(int sockfd){
-    static struct ifreq ifr;  // for interface request (to fill the ip_header ip_src field)
+// struct in_addr *get_src_ip_adress(int sockfd){
+//     static struct ifreq ifr;  // for interface request (to fill the ip_header ip_src field)
 
-    memset(&ifr, 0, sizeof(ifr));
-    ifr.ifr_addr.sa_family = AF_INET;
-    // strncpy(ifr->ifr_name, "eth0", IFNAMSIZ - 1);
+//     memset(&ifr, 0, sizeof(ifr));
+//     ifr.ifr_addr.sa_family = AF_INET;
+//     strncpy(ifr.ifr_name, "eth0", IFNAMSIZ - 1);
 
-    if (ioctl(sockfd, SIOCGIFADDR, &ifr) >= 0)
-        return (&((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
+//     if (ioctl(sockfd, SIOCGIFADDR, &ifr) >= 0)
+//         return (&((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
 
-    perror("ioctl request failed getting src ip adress");
-    return (NULL);
-}
+//     perror("ioctl request failed getting src ip adress");
+//     return (NULL);
+// }
 
-void    fill_ip_header(struct ip *ip_header, char dest_str[100], int sockfd){
+void    fill_ip_header(struct ip *ip_header, struct addrinfo *res, int sockfd){
 /* 4 bits */     ip_header->ip_hl = IP_HEADER_LEN_IN_32BITS_INCREMENT;
 /* 4 bits */     ip_header->ip_v = IP_VERSION;
 /* 1 byte */    ip_header->ip_tos = 0;
@@ -114,10 +115,10 @@ void    fill_ip_header(struct ip *ip_header, char dest_str[100], int sockfd){
     ip_header->ip_ttl = TIME_TO_LIVE;
     ip_header->ip_p = IPPROTO_ICMP;
     ip_header->ip_sum = 0;
-    if (get_src_ip_adress(sockfd) == NULL)
-        ip_header->ip_src = INADDR_ANY;
-    if (!inet_aton(dest_str, &ip_header->ip_dst)) // met ip adresse bon format
-        return; // puterror eeeh
+    //if (get_src_ip_adress(sockfd) == NULL)
+    ip_header->ip_src.s_addr = INADDR_ANY;
+    ip_header->ip_dst = ((struct sockaddr_in *)res)->sin_addr;
+
     ip_header->ip_sum = compute_checksum((void*)ip_header, IP_HEADER_LEN); // -> u_short () 2 bytes
 }
 
@@ -139,20 +140,7 @@ void    fill_icmp_message(struct icmp *icmp_message){
 /* payload 40 bytes */
 }
 
-short compute_checksum(void *packet, int len){ // len = longueur du packet en octets/bytes
-    short   *tmp = packet; 
-    int     sum;
 
-    while (len > 1){
-        sum += *tmp++;
-        len -=2;
-    }
-    if (len == 1)
-        sum += *((char *)packet);
-    sum = (sum >> 16) + (sum & 0xffff);
-    sum += (sum << 16);
-    return (~((short)sum));
-}
 
 void    send_echo_request_packet(int sockfd){
     static char packet[IP_HEADER_LEN + ICMP_MSG_LEN];

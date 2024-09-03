@@ -18,10 +18,21 @@
 # include "regex.h"
 # include <sys/ioctl.h>             // ioctl() and ifreq struct
 # include <net/if.h>                // IFNAMSIZ constant
+# include <stdlib.h>                // malloc
+typedef struct s_data{
+    int                 sockfd;
+    struct sockaddr     dest;
+    short               nb_packets_sent;
+    
+} t_data ; 
 
-void    fill_ip_header(struct ip *ip_header, char dest_str[100], int sockfd);
-void    fill_icmp_message(struct icmp *icmp_message);
+/*          fill_packet.h           */
+void    fill_ip_header(struct ip *ip_header, struct addrinfo *res, int sockfd);
+void    fill_icmp_msg(struct icmp *icmp_message);
+
+/*          compute_checksum.h      */
 short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
-void    print_memory(char *memory);
+
+
 
 #endif

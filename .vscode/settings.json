@@ -12,6 +12,9 @@
         "stdlib.h": "c",
         "macros.h": "c",
         "time.h": "c",
-        "inet.h": "c"
+        "inet.h": "c",
+        "ioctl.h": "c",
+        "ping.h": "c",
+        "if.h": "c"
     }
 }

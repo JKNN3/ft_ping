@@ -2,8 +2,12 @@ NAME	= ft_ping
 
 FLAGS	= -Wextra -Wall -Werror
 
-SRC		= 	main.c					\
-			notions/print_memory.c
+SRC		= 	ping/main.c					\
+			ping/parse_input.c			\
+			ping/fill_packet.c			\
+			ping/compute_checksum.c		\
+			ping/print_packet.c
+
 
 OBJ 	=	${SRC:.c=.o}
 
