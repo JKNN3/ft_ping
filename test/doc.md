@@ -236,24 +236,34 @@ Get, set, or delete the address of the device using
               ifr_addr, or ifr6_addr with ifr6_prefixlen.  Setting or
               deleting the interface address is a privileged operation.
 
+inside ifreq
 Constant: size_t IFNAMSIZ
     This constant defines the maximum buffer size needed to hold an interface name, including its terminating zero byte.
-    struct ifreq {
-               char ifr_name[IFNAMSIZ]; /* Interface name */
-               union {
-                   struct sockaddr ifr_addr;
-                   struct sockaddr ifr_dstaddr;
-                   struct sockaddr ifr_broadaddr;
-                   struct sockaddr ifr_netmask;
-                   struct sockaddr ifr_hwaddr;
-                   short           ifr_flags;
-                   int             ifr_ifindex;
-                   int             ifr_metric;
-                   int             ifr_mtu;
-                   struct ifmap    ifr_map;
-                   char            ifr_slave[IFNAMSIZ];
-                   char            ifr_newname[IFNAMSIZ];
-                   char           *ifr_data;
-               };
-           };
 
+
+
+we need to be root to create raw socket, we can set give the rights to an executable using setcap (set capabilities)
+    in the makefile: `sudo setcap cap_net_raw ./ft_ping`
+
+we now need to make it work with valgrind :')
+cmd to see a binary capabilities: `grepcap /path/to/the/binary` (ex: /usr/bin/ping)
+        set capabilities : `setcap the_capability ./the_binary` (ex: setcap cap_net_raw=ep ./ft_ping)
+        remove capabilities: `setcap -r </path/to/binary>`
+    setcap needs root or sudo
+
+The capabilities are attached to the process by the Linux kernel
+from the file in the filesystem when the kernel performs the
+syscall execve(filename,,).  Neither valgrind nor its tools
+perform execve(target_filename,,).
+
+If a capability is inheritable, then attaching it to the filename
+of some valgrind execve() in the dynamic chain of execve()s (see
+"strace -e trace=execve valgrind ...") should work.
+Otherwise, investigate prctl(PR_CAP_AMBIENT_RAISE,) etc.
+Logically you want valgrind to prctl(PR_CAP_SET_ATTACH,)
+but that apparently does not exist.
+
+
+
+Linux capabilities:
+https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities

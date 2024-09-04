@@ -16,6 +16,9 @@ OBJ 	=	${SRC:.c=.o}
 
 $(NAME): $(OBJ)
 	clang ${OBJ} -o $(NAME)
+	sudo chown root:root $(NAME)
+	sudo chmod 4755 $(NAME)
+#	sudo setcap cap_net_raw=eip ./ft_ping
 
 all : ${NAME}
 
