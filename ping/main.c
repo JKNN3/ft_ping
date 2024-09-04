@@ -30,13 +30,20 @@ int main(int argc, char **argv){
         return 0;
 
 
-    ping_conf.sockfd = socket(PF_INET, SOCK_RAW, 0);
+    ping_conf.sockfd = socket(AF_INET, SOCK_RAW, IPPROTO_ICMP);
+    if (ping_conf.sockfd < 0){
+        perror("socket() failed ");
+    }
     int opt_value = 1;
     if (setsockopt(ping_conf.sockfd, IPPROTO_IP, IP_HDRINCL, &opt_value, sizeof(int)) != 0){
-        perror("setsockopt failed ");
-    }       // 
+        perror("setsockopt IP_HDRINCL failed ");
+    }
+    int ttl = TIME_TO_LIVE;
+    if (setsockopt(ping_conf.sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int)) != 0 ){
+        perror("setsockopt IP_TTL failed ");
+    }
 
-
+// http://manpagesfr.free.fr/man/man7/raw.7.html
 
     //char packet[PACKET_LEN];
     char *packet = malloc(sizeof(char) * PACKET_LEN);
