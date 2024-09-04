@@ -2,7 +2,7 @@
 
 short compute_checksum(void *packet, int len){ // len = longueur du packet en octets/bytes
     short   *tmp = packet; 
-    int     sum;
+    int      sum = 0;
 
     while (len > 1){
         sum += *tmp++;

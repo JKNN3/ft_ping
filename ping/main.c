@@ -30,7 +30,14 @@ int main(int argc, char **argv){
         return 0;
 
 
-    ping_conf.sockfd = socket(PF_INET, SOCK_STREAM, 0);
+    ping_conf.sockfd = socket(PF_INET, SOCK_RAW, 0);
+    int opt_value = 1;
+    if (setsockopt(ping_conf.sockfd, IPPROTO_IP, IP_HDRINCL, &opt_value, sizeof(int)) != 0){
+        perror("setsockopt failed ");
+    }       // 
+
+
+
     //char packet[PACKET_LEN];
     char *packet = malloc(sizeof(char) * PACKET_LEN);
     memset(packet, 2, PACKET_LEN);
@@ -52,22 +59,23 @@ int main(int argc, char **argv){
 
     fill_ip_header((struct ip*)packet, &ping_conf);
 
-    //for (int i = 0; i < PACKET_LEN; i++){ // print in hexa
-    //    if (i % 8 == 0)
-    //        printf ("  ");
-    //    if (i % 16 == 0)
-    //        printf ("\n");
-    //    data = ((unsigned char*)packet)[i];
-    //    printf("%02x ", data);
-    //}
-    //printf ("\n");
 
     fill_icmp_msg((struct icmp*)(packet + IP_HEADER_LEN));
 
-    for(int i = 0; i < PACKET_LEN; i++){
+    for(int i = (IP_HEADER_LEN + ICMP_HEADER_LEN + 16); i < PACKET_LEN; i++){
         packet[i] = i + '0';
     }
     packet[PACKET_LEN - 1] = '\0';
+
+    for (int i = 0; i < PACKET_LEN; i++){ // print in hexa
+       if (i % 8 == 0)
+           printf ("  ");
+       if (i % 16 == 0)
+           printf ("\n");
+       data = ((unsigned char*)packet)[i];
+       printf("%02x ", data);
+    }
+    printf ("\n");
 
 
     int send_status = sendto(ping_conf.sockfd, packet, PACKET_LEN, 0, (const struct sockaddr*)&ping_conf.dest, sizeof(struct sockaddr));
