@@ -16,6 +16,7 @@
         "ioctl.h": "c",
         "ping.h": "c",
         "if.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "stdbool.h": "c"
     }
 }
