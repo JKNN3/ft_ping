@@ -30,3 +30,9 @@ static bool get_dest_addr(char *addr, t_conf *conf){
     freeaddrinfo(res);
     return 1;
 }
+
+bool init_conf_struct(t_conf *conf){
+    conf->nb_packets_transmitted = 0;
+    conf->id = getpid();
+    return 0;
+}

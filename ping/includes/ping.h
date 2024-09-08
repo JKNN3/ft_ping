@@ -24,9 +24,23 @@
 typedef struct  s_conf  {
     int                     sockfd;
     struct sockaddr_in      dest;
-    short                   nb_packets_sent;
+    unsigned short          nb_packets_transmitted;
+    struct timeval          start_timestamp;
+    pid_t                   id;
     
 }               t_conf ; 
+
+typedef struct  s_stats{
+    unsigned int            nb_packets_transmitted;
+    unsigned int            nb_packets_received;
+    double                  loss_percentage;
+    unsigned long int       total_time_ms;
+//      rtt = round_trip delay
+    float                   rtt_min;        // min : conf->rtt_min > rtt ? rtt : conf->rtt_min
+    float                   rtt_total;      //  avg = total / nb_packets_received
+    float                   rtt_max;        // min : conf->rtt_max < rtt ? rtt : conf->rtt_max
+    float                   rtt_sq_total;   //  += rtt * rtt;
+}               t_stats;
 
 
 /*          parse_argv_get_conf.c   */

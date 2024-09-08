@@ -3,14 +3,14 @@
 /*
           TO DO
 
-    - find why checksum isn't working properly 
-    - complete offset field and co
-    - make my ping work
-
+    - parsing
+    - compute and print statistics
+    - faire une boucle ou on check le tpsnintervalle d'envoi
+    - gérer les signaux
+    - booléen a mettre a 0 si on revoit un signal
 
           TO DO NEXT
 
-    - parsing
     - recv (need parsing too)
 
   ~ maybe find a way to make valgrind work

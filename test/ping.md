@@ -12,9 +12,51 @@ traceroute implementation in python
 
 https://www.geeksforgeeks.org/traceroute-implementation-on-python/
 
+options
 
 
-bonus:
+  -c, --count=NUMBER         stop after sending NUMBER packets
+  -i, --interval=FLOAT       wait, FLOAT * 1, second between sending each packet
+  -n, --numeric              do not resolve host addresses
+      --ttl=N                specify N as time-to-live
+  -T, --tos=NUM              set type of service (TOS) to NUM
+  -v, --verbose              verbose output
+  -w, --timeout=N            stop after N seconds
+  -W, --linger=N             number of seconds to wait for response
+
+ Options valid for --echo requests:
+
+  -f, --flood                flood ping (root only)
+  -l, --preload=NUMBER       send NUMBER packets as fast as possible before
+                             falling into normal mode of behavior (root only)
+  -p, --pattern=PATTERN      fill ICMP packet with given pattern (hex)
+  -q, --quiet                quiet output
+  -s, --size=NUMBER          send NUMBER data octets
+
+  -?, --help                 give this help list
+      --usage                give a short usage message
+  -V, --version              print program version
+
+
+
+
+            ** BONUS: **
+
+-- print                print le paquet en hexa
+format :
+
+adresse memoire |                   hexa                    | traduction ascii
+
+00000000  30 31 32 33 34 35 36 37  38 39 41 42 43 44 45 46  |0123456789ABCDEF|
+00000010  0a 2f 2a 20 2a 2a 2a 2a  2a 2a 2a 2a 2a 2a 2a 2a  |./* ************|
+00000020  2a 2a 2a 2a 2a 2a 2a 2a  2a 2a 2a 2a 2a 2a 2a 2a  |****************|
+*
+00000040  2a 2a 20 2a 2f 0a 09 54  61 62 6c 65 20 77 69 74  |** */..Table wit|
+00000050  68 20 54 41 42 73 20 28  30 39 29 0a 09 31 09 09  |h TABs (09)..1..|
+00000060  32 09 09 33 0a 09 33 2e  31 34 09 36 2e 32 38 09  |2..3..3.14.6.28.|
+00000070  39 2e 34 32 0a                                    |9.42.|
+00000075
+
 
 Pratiques et interessants:
         -m marque
@@ -40,6 +82,7 @@ Pratiques et interessants:
               Temps d'attente d'une réponse (en secondes) (NdT : ?)
         -b     
               Permet de « pinger » une adresse de diffusion (broadcast).
+        -d                 use SO_DEBUG socket option
 
         -f
               Mode inondation (dit « Flood »).Pour chaque ECHO_REQUEST envoyé,
@@ -66,3 +109,18 @@ Simples à faire:
               au démarrage et à la fin de l'exécution.
         -a
               ping audible. 
+
+
+              Payload Options
+
+--data <hex string> (Append custom binary data to sent packets)
+
+This option lets you include binary data as payload in sent packets. <hex string> may be specified in any of the following formats: 0xAABBCCDDEEFF<...>, AABBCCDDEEFF<...> or \xAA\xBB\xCC\xDD\xEE\xFF<...>. Examples of use are --data 0xdeadbeef and --data \xCA\xFE\x09. Note that if you specify a number like 0x00ff no byte-order conversion is performed. Make sure you specify the information in the byte order expected by the receiver.
+
+--data-string <string> (Append custom string to sent packets)
+
+This option lets you include a regular string as payload in sent packets. <string> can contain any string. However, note that some characters may depend on your system's locale and the receiver may not see the same information. Also, make sure you enclose the string in double quotes and escape any special characters from the shell. Example: --data-string "Jimmy Jazz...".
+
+--data-length <len> (Append random data to sent packets)
+
+This option lets you include <len> random bytes of data as payload in sent packets. <len> must be an integer in the range [0–65400]. However, values higher than 1400 are not recommended because it may not be possible to transmit packets due to network MTU limitations.

@@ -5,6 +5,7 @@ void send_ping(t_conf *conf){
     char packet[PACKET_LEN];
     memset(packet, 0, PACKET_LEN);
 
+    gettimeofday(&conf->start_timestamp, NULL);
 
     fill_ip_header((struct ip*)&packet, conf);
     fill_payload((char*)&packet);
@@ -12,9 +13,6 @@ void send_ping(t_conf *conf){
 
     print_packet(packet);
 
-    int send_status = sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr));
-    if (send_status < 0)
+    if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0)
         perror("send status ");
-    printf("send status: %d\n", send_status);
-
 }

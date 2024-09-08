@@ -23,8 +23,8 @@ void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
     packet->icmp_type = ICMP_ECHO;
     packet->icmp_code = ICMP_ECHOREPLY;
     packet->icmp_cksum = 0;
-    packet->icmp_id = (getpid() & 0xFFFF);
-    packet->icmp_seq= conf->nb_packets_sent++;
+    packet->icmp_id = (conf->id & 0xFFFF);
+    packet->icmp_seq= conf->nb_packets_transmitted++;
 
      void *icmp_timeval = (void*)packet + ICMP_HEADER_LEN;
      if (gettimeofday((struct timeval *)icmp_timeval, NULL) < 0)

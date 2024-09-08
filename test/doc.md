@@ -1,3 +1,5 @@
+Mike Muuss a écrit ce programme en décembre 1983. Son nom vient du son émis par un sonar puisque leur action est similaire (émission d'un signal qui vient rebondir sur une cible pour revenir à l'envoyeur)2. Par la suite, David L. Mills a fourni un rétro-acronyme : « Packet InterNet Groper ». 
+peloteur de réseau par packet? 🤨
 
 https://www.cloudflare.com/learning/ddos/glossary/internet-control-message-protocol-icmp/
 
@@ -267,3 +269,20 @@ but that apparently does not exist.
 
 Linux capabilities:
 https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilities
+
+
+
+
+stats:
+mdev calculation:
+  mdrv = round-trip-time-total / nb of packets recvd  === rtt moyen
+  rtt sq total /= nb of packets recvd                 === moyenne des rtt au carré
+  mdev =  sqrt (rtt sq total - (mdev * mdev))         === racine carrée (moyenne des rtt au carré - (carré rtt moyen))
+
+  rtt sq total += rtt * rtt;
+
+
+  l'ancien ping utilisait le PID (getpid()) pour l'id du icmp header, le nouveau utilise l'UID (getuid()) je met getpid pcq ça laisse surement moins de traces?
+
+
+  
