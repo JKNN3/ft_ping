@@ -14,7 +14,7 @@ void    fill_ip_header(struct ip *packet, t_conf *conf){
     packet->ip_p = IPPROTO_ICMP;
     packet->ip_sum = 0;
     packet->ip_src.s_addr = INADDR_ANY;
-    packet->ip_dst.s_addr = ((struct sockaddr_in*)&conf->dest)->sin_addr.s_addr;
+    packet->ip_dst.s_addr = conf->dest.sin_addr.s_addr;
     packet->ip_sum = compute_checksum((void*)packet, IP_HEADER_LEN);
 }
 

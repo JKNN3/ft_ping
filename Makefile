@@ -8,7 +8,9 @@ SRC		= 	ping/main.c					\
 			ping/compute_checksum.c		\
 			ping/print_packet.c			\
 			ping/socket.c				\
-			ping/send_ping.c
+			ping/send_ping.c			\
+			ping/recv_pong.c			\
+	
 
 OBJ 	=	${SRC:.c=.o}
 

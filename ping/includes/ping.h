@@ -20,6 +20,7 @@
 # include <net/if.h>                // IFNAMSIZ constant
 # include <stdlib.h>                // malloc
 # include <stdbool.h>               // TRUE, FALSE 
+# include <float.h>
 
 typedef struct  s_conf  {
     int                     sockfd;
@@ -27,24 +28,23 @@ typedef struct  s_conf  {
     unsigned short          nb_packets_transmitted;
     struct timeval          start_timestamp;
     pid_t                   id;
-    
+    unsigned int            time_interval;
+    char*                   dest_ip;
 }               t_conf ; 
 
 typedef struct  s_stats{
-    unsigned int            nb_packets_transmitted;
     unsigned int            nb_packets_received;
     double                  loss_percentage;
-    unsigned long int       total_time_ms;
+    long double             total_time_ms;  //  avg = total / nb_packets_received
 //      rtt = round_trip delay
     float                   rtt_min;        // min : conf->rtt_min > rtt ? rtt : conf->rtt_min
-    float                   rtt_total;      //  avg = total / nb_packets_received
     float                   rtt_max;        // min : conf->rtt_max < rtt ? rtt : conf->rtt_max
-    float                   rtt_sq_total;   //  += rtt * rtt;
+    long double             rtt_sq_total;   //  += rtt * rtt;
 }               t_stats;
 
 
 /*          parse_argv_get_conf.c   */
-bool    parse_input_get_conf(char *addr, t_conf *conf);
+bool    parse_input_get_conf(char *addr, t_conf *conf, t_stats *stats);
 
 /*          print_packet.c          */
 void    print_packet(char *packet);
@@ -63,6 +63,9 @@ short   compute_checksum(void *packet, int len); // len = longueur du packet en 
 
 /*          send_ping.c             */
 void send_ping(t_conf *conf);
+/*          recv_pong.c             */
+int recv_pong(t_conf *conf, t_stats *stats);
+
 
 
 #endif

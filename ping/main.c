@@ -18,13 +18,26 @@
 */
 
 int main(int argc, char **argv){
-    t_conf conf;
-
-    if (!parse_input_get_conf(argv[1], &conf) || !init_socket(&conf))
+    t_conf  conf;
+    t_stats stats;
+    if (!parse_input_get_conf(argv[1], &conf, &stats) || !init_socket(&conf))
         return 0;
 
-    send_ping(&conf);
+    PRINT_HEADER_MSG(conf.dest_ip, 1);
 
+    send_ping(&conf);
+    recv_pong(&conf, &stats);
+
+
+    PRINT_FINAL_STATS(conf.dest_ip,                                                                 \
+                      conf.nb_packets_transmitted-1,                                                \
+                      stats.nb_packets_received,                                                    \
+                      100 - ((stats.nb_packets_received / (conf.nb_packets_transmitted-1)) * 100),  \
+                      stats.total_time_ms,                                                          \
+                      stats.rtt_min,                                                               \
+                      (stats.total_time_ms / stats.nb_packets_received),                            \
+                      stats.rtt_max,                                                               \
+                      0.0);
     close(conf.sockfd);
     return (0);
 }
