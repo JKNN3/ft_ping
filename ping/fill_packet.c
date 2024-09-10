@@ -24,7 +24,7 @@ void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
     packet->icmp_code = ICMP_ECHOREPLY;
     packet->icmp_cksum = 0;
     packet->icmp_id = (conf->id & 0xFFFF);
-    packet->icmp_seq= conf->nb_packets_transmitted++;
+    packet->icmp_seq= ++(conf->seq);
 
      void *icmp_timeval = (void*)packet + ICMP_HEADER_LEN;
      if (gettimeofday((struct timeval *)icmp_timeval, NULL) < 0)

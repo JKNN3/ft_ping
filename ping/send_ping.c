@@ -3,7 +3,9 @@
 void send_ping(t_conf *conf){
 
     char packet[PACKET_LEN];
+
     memset(packet, 0, PACKET_LEN);
+    memset(&conf->start_timestamp, 0, sizeof(conf->start_timestamp));
 
     gettimeofday(&conf->start_timestamp,NULL);
 
@@ -13,6 +15,9 @@ void send_ping(t_conf *conf){
 
     // print_packet(packet);
 
-    if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0)
-        perror("send status ");
+    if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0){
+        perror("ping ");
+        exit(2);
+    }
+    return;
 }

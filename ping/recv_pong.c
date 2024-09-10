@@ -5,21 +5,24 @@ static void update_stats(t_stats *stats, double rtt);
 
 int recv_pong(t_conf *conf, t_stats *stats){
     static char packet_recv[84];
-
     memset(&packet_recv, 0, PACKET_LEN);
+
     int ret = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
 
-    unsigned short  seq;
+    stats->nb_packets_transmitted++;
+    unsigned short  seq = 0;
 	struct timeval	time;
-    int             ttl;
-    double          time_elapsed;
+    int             ttl = 0;
+    double          time_elapsed = 0.0;
+    memset(&time, 0, sizeof(struct timeval));
 
     seq = ((struct icmp *)(&packet_recv[IP_HEADER_LEN]))->icmp_seq;
     ttl = ((struct ip *)(packet_recv))->ip_ttl;
 	gettimeofday(&time, NULL);
     time_elapsed = compute_elapsed_time((void*)&(packet_recv[IP_HEADER_LEN + ICMP_HEADER_LEN]), &time);
 
-    PRINT_PACKET_STATS(conf->dest_ip, seq, ttl, time_elapsed);
+    // print_packet(packet_recv);
+    PRINT_PACKET_STATS(stats->dest_ip, seq, ttl, time_elapsed);
     update_stats(stats, time_elapsed);
     return 0;
 }

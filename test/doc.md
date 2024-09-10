@@ -287,4 +287,11 @@ mdev calculation:
 SIGINT    ctrl + c stop
 SIGQUIT   ctrl + \ affiche 18/18 packets, 0% loss, min/avg/ewma/max = 0.022/0.058/0.060/0.087 ms
 
+The Exponentially Weighted Moving Average (EWMA) is a data average
+EWMA is a tool for detecting smaller shifts in the mean of the time-bound process. An exponentially weighted moving average is also highly studied and used as a model to find a moving average of data. It is also very useful in forecasting event based on past data.
+
+The Exponentially Weighted Moving Average is an assumed basis that observations are normally distributed. It considers past data based on their weightage. As the data is more from the past, its weight for the calculation will decrease exponentially.
+
+Users can also give weight to the past data to find a different set of EWMA basis different weightage. Also, because of the geometrically displayed data, data doesn’t get affected much because of the outliers. Hence, more smoothed data can be achieved using this method.
+
   

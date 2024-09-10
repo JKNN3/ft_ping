@@ -26,17 +26,17 @@
 
 typedef struct  s_conf  {
     int                     sockfd;
-    struct sockaddr_in      dest;
-    unsigned short          nb_packets_transmitted;
-    struct timeval          start_timestamp;
     pid_t                   id;
-    unsigned int            time_interval;
-    char*                   dest_ip;
     int                     exit_status;
     float                   interval_time;      //in seconds
+    int                     seq;
+    struct sockaddr_in      dest;
+    struct timeval          start_timestamp;
 }               t_conf ; 
 
 typedef struct  s_stats{
+    char*                   dest_ip;
+    unsigned short          nb_packets_transmitted;
     unsigned int            nb_packets_received;
     double                  loss_percentage;
     long double             total_time_ms;
@@ -66,14 +66,20 @@ short   compute_checksum(void *packet, int len); // len = longueur du packet en 
 
 /*          send_ping.c             */
 void send_ping(t_conf *conf);
+
 /*          recv_pong.c             */
 int recv_pong(t_conf *conf, t_stats *stats);
 
 /*          print_stats_and_exit.c  */
-void    print_stats_and_exit(t_stats *stats, t_conf *conf);
+void    print_stats_and_exit(t_stats *stats, int sockfd, int exit_status);
+double   compute_rtt_avg(t_stats *stats);
 
 /*          handle_signals.c        */
-void intercept_and_handle_signals();
+void    intercept_and_handle_signals();
+
+/*          utils.c                 */
+t_stats *get_stats(bool get, t_stats *stats_struct);
+int     get_sockfd(bool get, int fd);
 
 
 #endif

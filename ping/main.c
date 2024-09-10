@@ -25,15 +25,15 @@ int main(int argc, char **argv){
     if (!parse_input_get_conf(argv[1], &conf, &stats) || !init_socket(&conf))
         return 0;
 
-    PRINT_HEADER_MSG(conf.dest_ip, 1);
+    PRINT_HEADER_MSG(stats.dest_ip, 1);
 
     while(1){
+
         intercept_and_handle_signals();
         send_ping(&conf);
         recv_pong(&conf, &stats);
 
-        sleep(conf.interval_time);
+        usleep(1000000);
     }
-    print_stats_and_exit(&stats, &conf);
-    return (0);
+    print_stats_and_exit(&stats, conf.sockfd, conf.exit_status);
 }
