@@ -10,6 +10,7 @@ SRC		= 	ping/main.c					\
 			ping/socket.c				\
 			ping/send_ping.c			\
 			ping/recv_pong.c			\
+			ping/handle_signals.c		\
 	
 
 OBJ 	=	${SRC:.c=.o}
@@ -18,7 +19,7 @@ OBJ 	=	${SRC:.c=.o}
 	clang ${FLAG} -c $< -o ${<:.c=.o}
 
 $(NAME): $(OBJ)
-	clang ${OBJ} -o $(NAME)
+	clang ${OBJ} -o $(NAME) -lm
 	sudo setcap cap_net_raw=eip ./ft_ping
 
 all : ${NAME}

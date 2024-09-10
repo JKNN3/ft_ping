@@ -51,5 +51,7 @@ static void init_stats_struct(t_stats *stats){
 static bool init_conf_struct(t_conf *conf){
     conf->nb_packets_transmitted = 1;
     conf->id = getpid();
+    conf->exit_status = 0;
+    conf->interval_time = 1;
     return 0;
 }

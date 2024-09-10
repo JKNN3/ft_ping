@@ -16,6 +16,8 @@
   ~ maybe find a way to make valgrind work
 
 */
+# include <math.h>
+
 
 int main(int argc, char **argv){
     t_conf  conf;
@@ -25,19 +27,13 @@ int main(int argc, char **argv){
 
     PRINT_HEADER_MSG(conf.dest_ip, 1);
 
-    send_ping(&conf);
-    recv_pong(&conf, &stats);
+    while(1){
+        intercept_and_handle_signals();
+        send_ping(&conf);
+        recv_pong(&conf, &stats);
 
-
-    PRINT_FINAL_STATS(conf.dest_ip,                                                                 \
-                      conf.nb_packets_transmitted-1,                                                \
-                      stats.nb_packets_received,                                                    \
-                      100 - ((stats.nb_packets_received / (conf.nb_packets_transmitted-1)) * 100),  \
-                      stats.total_time_ms,                                                          \
-                      stats.rtt_min,                                                               \
-                      (stats.total_time_ms / stats.nb_packets_received),                            \
-                      stats.rtt_max,                                                               \
-                      0.0);
-    close(conf.sockfd);
+        sleep(conf.interval_time);
+    }
+    print_stats_and_exit(&stats, &conf);
     return (0);
 }

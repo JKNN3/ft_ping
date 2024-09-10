@@ -20,7 +20,9 @@
 # include <net/if.h>                // IFNAMSIZ constant
 # include <stdlib.h>                // malloc
 # include <stdbool.h>               // TRUE, FALSE 
-# include <float.h>
+# include <float.h>                 // FLT_MAX, FLT_MIN
+# include <math.h>                 // sqrt()
+# include <signal.h>                // sigaction
 
 typedef struct  s_conf  {
     int                     sockfd;
@@ -30,16 +32,18 @@ typedef struct  s_conf  {
     pid_t                   id;
     unsigned int            time_interval;
     char*                   dest_ip;
+    int                     exit_status;
+    float                   interval_time;      //in seconds
 }               t_conf ; 
 
 typedef struct  s_stats{
     unsigned int            nb_packets_received;
     double                  loss_percentage;
-    long double             total_time_ms;  //  avg = total / nb_packets_received
+    long double             total_time_ms;
 //      rtt = round_trip delay
-    float                   rtt_min;        // min : conf->rtt_min > rtt ? rtt : conf->rtt_min
-    float                   rtt_max;        // min : conf->rtt_max < rtt ? rtt : conf->rtt_max
-    long double             rtt_sq_total;   //  += rtt * rtt;
+    float                   rtt_min;
+    float                   rtt_max;
+    long double             rtt_sq_total;
 }               t_stats;
 
 
@@ -51,7 +55,6 @@ void    print_packet(char *packet);
 
 /*          socket.c                */
 bool init_socket(t_conf *conf);
-
 
 /*          fill_packet.c           */
 void    fill_ip_header(struct ip *ip_header,t_conf *conf);
@@ -66,6 +69,11 @@ void send_ping(t_conf *conf);
 /*          recv_pong.c             */
 int recv_pong(t_conf *conf, t_stats *stats);
 
+/*          print_stats_and_exit.c  */
+void    print_stats_and_exit(t_stats *stats, t_conf *conf);
+
+/*          handle_signals.c        */
+void intercept_and_handle_signals();
 
 
 #endif

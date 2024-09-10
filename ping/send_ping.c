@@ -5,7 +5,7 @@ void send_ping(t_conf *conf){
     char packet[PACKET_LEN];
     memset(packet, 0, PACKET_LEN);
 
-    gettimeofday(&conf->start_timestamp, NULL);
+    gettimeofday(&conf->start_timestamp,NULL);
 
     fill_ip_header((struct ip*)packet, conf);
     fill_payload((char*)&packet);

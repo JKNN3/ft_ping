@@ -275,7 +275,7 @@ https://book.hacktricks.xyz/linux-hardening/privilege-escalation/linux-capabilit
 
 stats:
 mdev calculation:
-  mdrv = round-trip-time-total / nb of packets recvd  === rtt moyen
+  mdev = round-trip-time-total / nb of packets recvd  === rtt moyen
   rtt sq total /= nb of packets recvd                 === moyenne des rtt au carré
   mdev =  sqrt (rtt sq total - (mdev * mdev))         === racine carrée (moyenne des rtt au carré - (carré rtt moyen))
 
@@ -284,5 +284,7 @@ mdev calculation:
 
   l'ancien ping utilisait le PID (getpid()) pour l'id du icmp header, le nouveau utilise l'UID (getuid()) je met getpid pcq ça laisse surement moins de traces?
 
+SIGINT    ctrl + c stop
+SIGQUIT   ctrl + \ affiche 18/18 packets, 0% loss, min/avg/ewma/max = 0.022/0.058/0.060/0.087 ms
 
   
