@@ -12,32 +12,50 @@ traceroute implementation in python
 
 https://www.geeksforgeeks.org/traceroute-implementation-on-python/
 
-options
+options:
+
+      invalid option:
+                  root@k-VirtualBox:/home/k/Documents/ping# ping -z abc 1.1.1.1
+                  ping: invalid option -- 'z'
+                  Try 'ping --help' or 'ping --usage' for more information.
 
 
-  -c, --count=NUMBER         stop after sending NUMBER packets
-  -i, --interval=FLOAT       wait, FLOAT * 1, second between sending each packet
-  -n, --numeric              do not resolve host addresses
-      --ttl=N                specify N as time-to-live
-  -T, --tos=NUM              set type of service (TOS) to NUM
+-c --count=nb forcément un int, on peut metre un long long        // stop after sending NUMBER packets
+-i --interval=nb int ou float                                     // wait, FLOAT * 1, second between sending each packet
+      erreur:
+            ping: invalid argument: '18446744073709551610': Numerical result out of range
+              
+--ttl nb       nb entre 0 et 255                                     // specify nb as time-to-live
+      erreur:
+            ping -t nb 1.1.1.1
+                  ping: option value too big: nb
+                        (-> 0 <= value <= 255)
+            
+            root@k-VirtualBox:/home/k/Documents/ping# ping --ttl a 1.1.1.1
+                  ping: invalid value (`a' near `a')
+            root@k-VirtualBox:/home/k/Documents/ping# ping --ttl a1 1.1.1.1
+                  ping: invalid value (`a1' near `a1')
+            root@k-VirtualBox:/home/k/Documents/ping# ping --ttl abc 1.1.1.1
+                  ping: invalid value (`abc' near `abc')
+
   -v, --verbose              verbose output
-  -w, --timeout=N            stop after N seconds
-  -W, --linger=N             number of seconds to wait for response
 
- Options valid for --echo requests:
+  -w, --timeout=N            stop after N seconds
+      erreurs:
+            ping -w 1844674407370955161 1.1.1.1
+                  -> ping: invalid argument: '1844674407370955161': out of range: 0 <= value <= 2147483647
+
+      -d, --debug                set the SO_DEBUG option
+
 
   -f, --flood                flood ping (root only)
-  -l, --preload=NUMBER       send NUMBER packets as fast as possible before
-                             falling into normal mode of behavior (root only)
-  -p, --pattern=PATTERN      fill ICMP packet with given pattern (hex)
   -q, --quiet                quiet output
-  -s, --size=NUMBER          send NUMBER data octets
 
   -?, --help                 give this help list
       --usage                give a short usage message
-  -V, --version              print program version
 
-
+      -- print                print le paquet en hexa
+      -q
 
 
             ** BONUS: **
@@ -82,6 +100,7 @@ Pratiques et interessants:
               Temps d'attente d'une réponse (en secondes) (NdT : ?)
         -b     
               Permet de « pinger » une adresse de diffusion (broadcast).
+
         -d                 use SO_DEBUG socket option
 
         -f

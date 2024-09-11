@@ -20,6 +20,8 @@
         "stdbool.h": "c",
         "random": "c",
         "limits": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "signal.h": "c",
+        "math.h": "c"
     }
 }

@@ -1,6 +1,10 @@
 #ifndef PING_H
 # define PING_H
 
+# include "macros.h"
+# include "regex_macros.h"
+# include "print_macros.h"
+
 # include <stdio.h>                 // printf
 # include <string.h>                // memset()
 # include <regex.h> 
@@ -14,8 +18,6 @@
 # include <arpa/inet.h>             // inet_ntop()
 # include <sys/time.h>              // gettimeofday()
 # include <errno.h>
-# include "macros.h"
-# include "regex.h"
 # include <sys/ioctl.h>             // ioctl() and ifreq struct
 # include <net/if.h>                // IFNAMSIZ constant
 # include <stdlib.h>                // malloc
@@ -23,6 +25,7 @@
 # include <float.h>                 // FLT_MAX, FLT_MIN
 # include <math.h>                 // sqrt()
 # include <signal.h>                // sigaction
+# include <curses.h> 
 
 typedef struct  s_conf  {
     int                     sockfd;
@@ -33,6 +36,23 @@ typedef struct  s_conf  {
     struct sockaddr_in      dest;
     struct timeval          start_timestamp;
 }               t_conf ; 
+
+typedef struct option{
+    bool                audible;    // -a
+    bool                debug;      // -d, --debug
+    bool                flood;      // -f --flood
+    bool                help;       // -? --help
+    bool                print;      // --print
+    bool                quiet;      // -q, --quiet 
+    bool                usage;      // --usage
+    bool                verbose;    // -v --verbose
+
+    unsigned long int   count;      // -c --count=nb
+    double              interval;   // -i --interval=nb 
+    unsigned long int   timeout;    // -w, --timeout=N
+    int                 ttl;        // --ttl
+}               t_option ;
+
 
 typedef struct  s_stats{
     char*                   dest_ip;

@@ -3,7 +3,7 @@ NAME	= ft_ping
 FLAGS	= -Wextra -Wall -Werror
 
 SRC		= 	ping/main.c					\
-			ping/parse_input_get_conf.c	\
+			ping/get_conf.c				\
 			ping/fill_packet.c			\
 			ping/compute_checksum.c		\
 			ping/print_packet.c			\
