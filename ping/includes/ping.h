@@ -43,13 +43,13 @@ typedef struct  s_conf  {
 typedef struct option{
     bool                audible;    // -a
     bool                debug;      // -d, --debug
+    bool                count;
     bool                flood;      // -f --flood
     bool                help;       // -? --help
     bool                print;      // --print
     bool                quiet;      // -q, --quiet 
     bool                usage;      // --usage
     bool                verbose;    // -v --verbose
-    bool                count;
 
 //    unsigned long int   count;      // -c --count=nb
 //    double              interval;   // -i --interval=nb 

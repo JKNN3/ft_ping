@@ -47,7 +47,24 @@ static bool regex_get_and_set_option_and_value(t_option *opt, char *option_value
     int res = regexec(&reg, option_value, MAXGROUP, groupArray, 0);
     if (res == 0)
     {
-
+        if(groupArray[0].rm_so == -1 || groupArray[0].rm_so == groupArray[0].rm_eo){
+            regfree(&reg);
+            return FALSE;
+        }
+        if(groupArray[1].rm_so == -1 || groupArray[1].rm_so == groupArray[1].rm_eo){
+            regfree(&reg);
+            return FALSE;
+        }
+        for(int i = 0; i < 4; i++){
+            if (regexCheckFormat(groupArray[0].rm_so, regex_tab_option_without_value[i])){
+                if (!regexCheckFormat(groupArray[1].rm_so, regex_tab_option_value[i])){
+                    regfree(&reg);
+                    return puterr(ERROR_INVALID_VALUE(groupArray[1].rm_so));
+                }
+            }
+        }
+            
+        }
     }
     regfree(&reg);
     return 0;
@@ -57,30 +74,30 @@ static bool regex_get_and_set_option_value(t_option *opt, t_conf *conf, char *op
     int index_opt;
 
     for (index_opt = 0; index_opt < 4; index_opt++){
-        if (regexCheckFormat(index_opt, regex_tab_fullname_option[index_opt]));
+        if (regexCheckFormat(index_opt, regex_tab_option_without_value[index_opt]));
             break;
     }
 
     switch (index_opt)
     {
     case COUNT:
-        if (!regexCheckFormat(value, regex_tab_bool_short_option_value[COUNT]))
+        if (!regexCheckFormat(value, regex_tab_option_without_value[COUNT]))
             return puterr(ERROR_INVALID_VALUE(value));
         conf->nb_packets_to_send = strtoull(value, NULL, 10);
         opt->count = TRUE;
         break;
     case INTERVAL:
-        if (!regexCheckFormat(value, regex_tab_bool_short_option_value[INTERVAL]))
+        if (!regexCheckFormat(value, regex_tab_option_without_value[INTERVAL]))
             return puterr(ERROR_INVALID_VALUE(value));
         conf->interval_time = strtold(value, NULL);
         break;
     case TIMEOUT:
-        if (!regexCheckFormat(value, regex_tab_bool_short_option_value[TIMEOUT]))
+        if (!regexCheckFormat(value, regex_tab_option_without_value[TIMEOUT]))
             return puterr(ERROR_INVALID_VALUE(value));
         conf->interval_time = strtold(value, NULL);
         break;
     case TTL:
-        if (!regexCheckFormat(value, regex_tab_bool_short_option_value[TTL]))
+        if (!regexCheckFormat(value, regex_tab_option_without_value[TTL]))
             return puterr(ERROR_INVALID_VALUE(value));
         conf->ttl = atoi(value);
         if (conf->ttl > 255)
@@ -92,7 +109,7 @@ static bool regex_get_and_set_option_value(t_option *opt, t_conf *conf, char *op
 
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
-        if (regexCheckFormat(option, regex_tab_bool_short_option[i])){
+        if (regexCheckFormat(option, regex_tab_bool_option[i])){
                 opt[i] = true;
             return TRUE;
         }
@@ -105,11 +122,11 @@ static bool regex_get_ip_adress(char *dest , t_conf *conf){
 }
 
 int regex_check_option(char* arg){
-    if (regexCheckFormat(arg, REGEX_CHECK_ARG_OPTION_TYPE_BOOLEEN))
+    if (regexCheckFormat(arg, REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION))
         return BOOLEEN;
-    else if (regexCheckFormat(arg, REGEX_CHECK_ARG_OPTION_TYPE_FULLNAME))
+    else if (regexCheckFormat(arg, REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE))
         return OPTION_WITH_VALUE;
-    else if (regexCheckFormat(arg, REGEX_CHECK_ARG_OPTION_TYPE_SHORTNAME))
+    else if (regexCheckFormat(arg, REGEX_CHECK_ARG_TYPE_OPTION))
         return OPTION_WITHOUT_VALUE;
     else if (regexCheckFormat(arg, REGEX_CHECK_ARG_DEST))
         return DEST;
@@ -131,22 +148,3 @@ bool regexCheckFormat(const char *testedStr, const char *regex)
     return FALSE;
 }
 
-
-char *regexGetOption(char *arg, char *regex, int maxGroup){
-    regex_t reg;
-    regmatch_t groupArray[maxGroup + 1];
-
-    memset(groupArray, 0, sizeof(groupArray));
-
-    if (regcomp(&reg, regex, REG_EXTENDED) != 0){
-        perror("A problem occured compiling regex ");
-        return FALSE;
-    }
-    int res = regexec(&reg, arg, maxGroup, groupArray, 0);
-
-    if (res == 0)
-    {
-
-    }
-    regfree(&reg);
-}
