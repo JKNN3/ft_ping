@@ -31,10 +31,13 @@ typedef struct  s_conf  {
     int                     sockfd;
     pid_t                   id;
     int                     exit_status;
-    float                   interval_time;      //in seconds
+    long double             interval_time;      //in seconds
     int                     seq;
     struct sockaddr_in      dest;
     struct timeval          start_timestamp;
+    char                    *dest_name_or_ip;
+    unsigned long long int  nb_packets_to_send;
+    int                     ttl;
 }               t_conf ; 
 
 typedef struct option{
@@ -46,11 +49,12 @@ typedef struct option{
     bool                quiet;      // -q, --quiet 
     bool                usage;      // --usage
     bool                verbose;    // -v --verbose
+    bool                count;
 
-    unsigned long int   count;      // -c --count=nb
-    double              interval;   // -i --interval=nb 
-    unsigned long int   timeout;    // -w, --timeout=N
-    int                 ttl;        // --ttl
+//    unsigned long int   count;      // -c --count=nb
+//    double              interval;   // -i --interval=nb 
+//    unsigned long int   timeout;    // -w, --timeout=N
+//    int                 ttl;        // --ttl
 }               t_option ;
 
 
@@ -100,6 +104,7 @@ void    intercept_and_handle_signals();
 /*          utils.c                 */
 t_stats *get_stats(bool get, t_stats *stats_struct);
 int     get_sockfd(bool get, int fd);
+bool    puterr(char *error);
 
 
 #endif

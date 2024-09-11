@@ -1,21 +1,21 @@
 #include "includes/ping.h"
 
 static bool get_dest_addr(char *addr, t_conf *conf);
-static bool init_conf_struct(t_conf *conf);
+static void init_conf_struct(t_conf *conf);
 static void init_stats_struct(t_stats *stats);
 
 bool    parse_input_get_conf(char *addr, t_conf *conf, t_stats *stats){
     if (!addr)
-        return 0; // return usage
+        return FALSE; // return usage
     if (!get_dest_addr(addr, conf))
-        return 0;
+        return FALSE;
     init_conf_struct(conf);
     init_stats_struct(stats);
     stats->dest_ip = inet_ntoa(conf->dest.sin_addr);
     get_stats(false, stats);
     get_sockfd(false, conf->sockfd);
 
-    return 1;
+    return TRUE;
 }
 
 static bool get_dest_addr(char *addr, t_conf *conf){
@@ -32,21 +32,20 @@ static bool get_dest_addr(char *addr, t_conf *conf){
     if (getaddrinfo(addr, NULL, &hints, &res)){
         freeaddrinfo(res);
         perror("getaddrinfo failed ");
-        return 0;
+        return FALSE;
     }
 
     conf->dest = *((struct sockaddr_in*)res->ai_addr);
     freeaddrinfo(res);
-    return 1;
+    return TRUE;
 }
 
-static bool init_conf_struct(t_conf *conf){
+static void init_conf_struct(t_conf *conf){
     conf->id = getpid();
     conf->exit_status = 0;
     conf->interval_time = 1;
     conf->seq = 0;
-
-    return 0;
+    conf->ttl = 64;
 }
 
 static void init_stats_struct(t_stats *stats){

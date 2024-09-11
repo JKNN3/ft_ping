@@ -34,7 +34,6 @@ options:
             root@k-VirtualBox:/home/k/Documents/ping# ping --ttl a 1.1.1.1
                   ping: invalid value (`a' near `a')
             root@k-VirtualBox:/home/k/Documents/ping# ping --ttl a1 1.1.1.1
-                  ping: invalid value (`a1' near `a1')
             root@k-VirtualBox:/home/k/Documents/ping# ping --ttl abc 1.1.1.1
                   ping: invalid value (`abc' near `abc')
 

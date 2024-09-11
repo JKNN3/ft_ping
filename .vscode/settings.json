@@ -22,6 +22,9 @@
         "limits": "c",
         "algorithm": "c",
         "signal.h": "c",
-        "math.h": "c"
+        "math.h": "c",
+        "regex": "c",
+        "bitset": "c",
+        "curses.h": "c"
     }
 }

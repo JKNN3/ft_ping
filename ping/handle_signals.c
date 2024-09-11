@@ -2,16 +2,6 @@
 
 static void print_sigquit_stats(t_stats *stats);
 
-static void handle_signals(int sig){
-    t_stats *stats = get_stats(true, NULL);
-
-    if (sig == SIGQUIT)
-        print_sigquit_stats(stats);
-    else if (sig == SIGINT){
-        print_stats_and_exit(stats, get_sockfd(1, 0), 0);
-    }
-}
-
 void intercept_and_handle_signals(){
 
     struct sigaction sa;
@@ -19,6 +9,16 @@ void intercept_and_handle_signals(){
     sa.sa_flags = SA_RESTART;
     sigaction(SIGINT, &sa, NULL);
     sigaction(SIGQUIT, &sa, NULL);
+}
+
+static void handle_signals(int sig){
+    t_stats *stats = get_stats(TRUE, NULL);
+
+    if (sig == SIGQUIT)
+        print_sigquit_stats(stats);
+    else if (sig == SIGINT){
+        print_stats_and_exit(stats, get_sockfd(1, 0), 0);
+    }
 }
 
 static void print_sigquit_stats(t_stats *stats){
