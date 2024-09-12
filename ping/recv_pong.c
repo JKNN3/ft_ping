@@ -24,7 +24,7 @@ int recv_pong(t_conf *conf, t_stats *stats){
     // print_packet(packet_recv);
     PRINT_PACKET_STATS(stats->dest_ip, seq, ttl, time_elapsed);
     update_stats(stats, time_elapsed);
-    beep();
+    // beep();
     return 0;
 }
 

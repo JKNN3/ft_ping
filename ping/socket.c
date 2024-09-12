@@ -14,7 +14,7 @@ bool init_socket(t_conf *conf){
         return FALSE;
     }
 
-    int ttl = TIME_TO_LIVE;
+    int ttl = conf->ttl;
     if (setsockopt(conf->sockfd, IPPROTO_IP, IP_TTL, &ttl, sizeof(int)) != 0 ){
         perror("setsockopt IP_TTL failed ");
         return FALSE;

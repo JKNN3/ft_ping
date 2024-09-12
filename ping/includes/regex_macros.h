@@ -10,40 +10,46 @@
 # define REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE "$--[count|inetrval|timeout|ttl]=[*]*^"
 # define REGEX_CHECK_ARG_DEST "$([0-9]{3}.[0-9]{3}.[0-9]{3}.[0-9]{3})|[*]*.[*]*^"
 
-# define MAXGROUP         2
+# define MAXGROUP               2
 # define NB_OF_BOOLEAN_OPTIONS  8
 
-extern inline char *regex_tab_option_without_value[4] = {
-    "$(-c)|(--count)^",
-    "$(-i)|(--interval)^",
-    "$(-w)|(--timeout)^",
-    "$--ttl^",
+# define REGEX_LIST_OPTION {\
+    "^(-c)|(--count)$",\
+    "^(-i)|(--interval)$",\
+    "^(-w)|(--timeout)$",\
+    "^--ttl$^"\
 };
 
-extern inline char *regex_tab_bool_option[]={
-    "$-a^",
-    "$(-d)|(--debug)^",
-    "$(-c)|(--count)^",
-    "$(-f)|(--flood)^",
-    "$(-?)|(--help)^",
-    "$--print^",
-    "$--quiet^",
-    "$--usage^",
-    "$(-v)|(--verbose)^",
+# define REGEX_LIST_BOOL_OPTION {\
+    "^-a$",\
+    "^(-d)|(--debug)$",\
+    "^(-c)|(--count)$",\
+    "^(-f)|(--flood)$",\
+    "^(-?)|(--help)$",\
+    "^--print$",\
+    "^--quiet$",\
+    "^--usage$",\
+    "^(-v)|(--verbose)$"\
 };
 
-extern inline char *regex_tab_option_value[4] = {
-    "$^",   // u long int
-    "$^",   // double
-    "$^",   // u long int
-    "$^",   // int mais short, juste regarder si il est pas trop long genre pas plus de 4 chiffres pour pas que atoi overflow
+# define REGEX_LIST_OPTION_VALUE {\
+    "^[+-]?([0-9]{1,20})$",\
+    "^[+-]?([0-9]*[.])?[0-9]+?([eE][+-]?[0-9]+)?$",\
+    "^[+-]?([0-9]{1,20})$",\
+    "^[+-]?([0-9]{1,10})$",\
 };
 
-extern inline char *regex_tab_fullname_option[4] = {
-    "$(--count)=([*]*)^",
-    "$(--interval)=([*]*)^",
-    "$(--timeout)=([*]*)^"
-    "$(--ttl)=([*]*)^"
+// u long int
+  // double
+   // u long int
+  // int mais short, juste regarder si il est pas trop long genre pas plus de 4 chiffres pour pas que atoi overflow
+
+
+# define REGEX_LIST_FULLNAME_OPTION {\
+    "^(--count)=([*]*)$",\
+    "^(--interval)=([*]*)$",\
+    "^(--timeout)=([*]*)$"\
+    "^(--ttl)=([*]*)$"\
 };
 
 enum{

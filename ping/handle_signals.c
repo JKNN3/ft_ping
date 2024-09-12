@@ -1,5 +1,6 @@
 #include "includes/ping.h"
 
+static void handle_signals(int sig);
 static void print_sigquit_stats(t_stats *stats);
 
 void intercept_and_handle_signals(){

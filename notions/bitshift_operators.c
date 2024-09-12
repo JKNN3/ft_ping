@@ -15,7 +15,7 @@ we can : nb <<= 2
 
 */
 #include  <stdio.h>
-
+#include <stdlib.h>
 int main(int argc, char **argv){
     int a = -100000;
     /*      left shifting       */
@@ -25,7 +25,8 @@ int main(int argc, char **argv){
     // for ( int i = 0; i < 32; i++){
     //     printf("left shifted by %02d: %08x | %u\n", i, a<<i, a<<i);
     // }
-
+    unsigned long long int aaa = strtoull("-a", NULL, 0);
+        printf("%llu\n", aaa);
     /*      right shifting      */
     printf("left shifted by 1: %d\n", a >> 1);
     printf("left shifted by 1: %d\n", a >> 2);

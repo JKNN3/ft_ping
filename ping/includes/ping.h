@@ -55,7 +55,7 @@ typedef struct option{
 //    double              interval;   // -i --interval=nb 
 //    unsigned long int   timeout;    // -w, --timeout=N
 //    int                 ttl;        // --ttl
-}               t_option ;
+}               t_opt ;
 
 
 typedef struct  s_stats{
@@ -72,7 +72,7 @@ typedef struct  s_stats{
 
 
 /*          parse_argv_get_conf.c   */
-bool    parse_input_get_conf(char *addr, t_conf *conf, t_stats *stats);
+bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
 
 /*          print_packet.c          */
 void    print_packet(char *packet);
@@ -106,5 +106,10 @@ t_stats *get_stats(bool get, t_stats *stats_struct);
 int     get_sockfd(bool get, int fd);
 bool    puterr(char *error);
 
+bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
+bool regex_check_format(const char *testedStr, const char *regex);
+
+/*          init_structs.c          */
+void    init_structs(t_conf *conf, t_opt *opt, t_stats *stats);
 
 #endif

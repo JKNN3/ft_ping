@@ -10,7 +10,7 @@ void    fill_ip_header(struct ip *packet, t_conf *conf){
     short off = 0;
     off = SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE;
     packet->ip_off = htons(off);
-    packet->ip_ttl = TIME_TO_LIVE;
+    packet->ip_ttl = conf->ttl;
     packet->ip_p = IPPROTO_ICMP;
     packet->ip_sum = 0;
     packet->ip_src.s_addr = INADDR_ANY;

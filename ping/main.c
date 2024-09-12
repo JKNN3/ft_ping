@@ -22,7 +22,9 @@
 int main(int argc, char **argv){
     t_conf  conf;
     t_stats stats;
-    if (!parse_input_get_conf(argv[1], &conf, &stats) || !init_socket(&conf))
+    t_opt   opt;
+
+    if (!parse_input_get_conf(argv, &conf, &stats, &opt) || !init_socket(&conf))
         return 0;
 
     PRINT_HEADER_MSG(stats.dest_ip, 1);
