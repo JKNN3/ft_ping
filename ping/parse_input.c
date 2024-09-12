@@ -141,7 +141,10 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
                         regfree(&reg);
                         return puterr(ERROR_INVALID_VALUE(groupArray[1].rm_so));
                     }
-                    
+                    int length = matches[1].rm_eo - matches[1].rm_so;
+            char captured[length + 1];  // +1 pour le caractère nul
+            strncpy(captured, input + matches[1].rm_so, length);
+            captured[length] = '\0';
                     set_value(opt, conf, option, (char *)groupArray[1].rm_so);
                     break;
                 }
