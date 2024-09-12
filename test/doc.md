@@ -294,4 +294,6 @@ The Exponentially Weighted Moving Average is an assumed basis that observations 
 
 Users can also give weight to the past data to find a different set of EWMA basis different weightage. Also, because of the geometrically displayed data, data doesn’t get affected much because of the outliers. Hence, more smoothed data can be achieved using this method.
 
-  
+
+
+

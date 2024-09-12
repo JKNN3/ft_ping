@@ -1,8 +1,8 @@
 #include "includes/ping.h"
 
 static void handle_signals(int sig);
-static void print_sigquit_stats(t_stats *stats);
 
+// handle <ctrl + c> and <ctrl + \> hotkeys signals
 void intercept_and_handle_signals(){
 
     struct sigaction sa;
@@ -15,25 +15,13 @@ void intercept_and_handle_signals(){
 static void handle_signals(int sig){
     t_stats *stats = get_stats(TRUE, NULL);
 
-    if (sig == SIGQUIT)
-        print_sigquit_stats(stats);
+    if (sig == SIGQUIT){        // inetutils coredump and the iputils print stats so
+        if(stats->nb_packets_transmitted % 2 == 0) // % 0 ??? :clown:
+            print_sigquit_stats(stats);
+        else
+            print_core_dump_and_exit(get_sockfd(1, 0));
+    }
     else if (sig == SIGINT){
         print_stats_and_exit(stats, get_sockfd(1, 0), 0);
     }
-}
-
-static void print_sigquit_stats(t_stats *stats){
-
-    printf("\b\b"); //  to get rid of the ctrl + \ (^\) hotkey print huuuuh
-    fflush(stdout);
-
-    PRINT_SIGQUIT_STATS( \
-        stats->nb_packets_transmitted,  \
-        stats->nb_packets_received,     \
-        100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100), \
-        stats->rtt_min,                 \
-        compute_rtt_avg(stats),         \
-        0.0,                            \
-        stats->rtt_max                  \
-    );
 }

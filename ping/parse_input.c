@@ -49,7 +49,7 @@ static int regex_check_option(char* arg){
 
 
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
-    char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
+    const char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
 
         switch (index_opt)
     {
@@ -85,7 +85,7 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
 
 static bool regex_get_and_set_opt_value(t_opt *opt, t_conf *conf, char *option, char *value){
     int index_opt;
-    char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
+    const char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
 
     for (index_opt = 0; index_opt < 4; index_opt++){
         if (regex_check_format(option, regex_tab_option_without_value[index_opt]))
@@ -97,7 +97,7 @@ static bool regex_get_and_set_opt_value(t_opt *opt, t_conf *conf, char *option, 
 }
 
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
-    char *regex_tab_bool_option[] = REGEX_LIST_BOOL_OPTION;
+    const char *regex_tab_bool_option[] = REGEX_LIST_BOOL_OPTION;
 
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
         if (regex_check_format(option, regex_tab_bool_option[i])){
@@ -112,9 +112,9 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
     regex_t reg;
     regmatch_t matches[MAXGROUP + 1];
 
-    char *regex_tab_fullname_option[] = REGEX_LIST_FULLNAME_OPTION;
-    char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
-    char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
+    const char *regex_tab_fullname_option[] = REGEX_LIST_FULLNAME_OPTION;
+    const char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
+    const char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
 
 
     for(int i = 0; i < 4; i++){

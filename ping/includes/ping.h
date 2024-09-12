@@ -60,7 +60,7 @@ typedef struct option{
 
 typedef struct  s_stats{
     char*                   dest_ip;
-    unsigned short          nb_packets_transmitted;
+    unsigned int            nb_packets_transmitted;
     unsigned int            nb_packets_received;
     double                  loss_percentage;
     long double             total_time_ms;
@@ -96,7 +96,8 @@ int recv_pong(t_conf *conf, t_stats *stats);
 
 /*          print_stats_and_exit.c  */
 void    print_stats_and_exit(t_stats *stats, int sockfd, int exit_status);
-double   compute_rtt_avg(t_stats *stats);
+void    print_core_dump_and_exit(int sockfd);
+void    print_sigquit_stats(t_stats *stats);
 
 /*          handle_signals.c        */
 void    intercept_and_handle_signals();
