@@ -3,15 +3,11 @@
 /*
           TO DO
 
-    - parsing
-    - compute and print statistics
-    - faire une boucle ou on check le tpsnintervalle d'envoi
-    - gérer les signaux
-    - booléen a mettre a 0 si on revoit un signal
+    - faire des tests avec tinytest :v
 
           TO DO NEXT
-
-    - recv (need parsing too)
+    - gestion d'erreurs
+    - check du packet reçu huu
 
   ~ maybe find a way to make valgrind work
 
@@ -35,7 +31,7 @@ int main(int argc, char **argv){
         send_ping(&conf);
         recv_pong(&conf, &stats);
 
-        usleep(1000000);
+        sleep(conf.interval_time);
     }
     print_stats_and_exit(&stats, conf.sockfd, conf.exit_status);
 }

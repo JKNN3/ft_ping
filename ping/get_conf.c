@@ -1,6 +1,7 @@
 #include "includes/ping.h"
 
 static bool get_dest_addr(char *addr, t_conf *conf);
+
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt){
 
     init_structs(conf, opt, stats);
@@ -28,8 +29,8 @@ static bool get_dest_addr(char *addr, t_conf *conf){
 
     conf->dest.sin_family = AF_INET;
     if (getaddrinfo(addr, NULL, &hints, &res)){
-        freeaddrinfo(res);
         perror("getaddrinfo failed ");
+        freeaddrinfo(res);
         return FALSE;
     }
 

@@ -14,7 +14,6 @@ SRC		= 	ping/main.c					\
 			ping/print_stats_and_exit.c	\
 			ping/handle_signals.c		\
 			ping/init_structs.c			\
-			ping/get_conf.c				\
 			ping/parse_input.c			\
 
 OBJ 	=	${SRC:.c=.o}

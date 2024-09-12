@@ -6,31 +6,26 @@ static bool regex_get_and_set_opt_value(t_opt *opt,  t_conf *conf, char *option,
 static int  regex_check_option(char* arg);
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value);
 
-bool regexParseInput(char ** argv, t_opt *opt, t_conf *conf)
+bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 {
-    for(int i = 0 ; argv[i]; i++){
+    for(int i = 1 ; argv[i]; i++){
 
         int ret = regex_check_option(argv[i]);
-
         switch (ret)
         {
         case BOOLEEN:
             regex_get_and_set_boolean_value((bool*)opt, argv[i]);
-            printf("boolean");
             break;
         case OPTION_WITH_VALUE:
             regex_get_and_set_opt_and_value(opt, conf, argv[i]);
-            printf("option with value");
             break;
         case OPTION_WITHOUT_VALUE:
             if (!argv[i + 1])
                 return puterr(ERROR_OPTION_REQUIRE_ARG(argv[i]));
             regex_get_and_set_opt_value(opt, conf, argv[i], argv[++i]);
-            printf("option without value");
             break;
         case DEST:
             conf->dest_name_or_ip = argv[i];
-            printf("ip");
             break;
         case ERROR:
             return puterr(ERROR_INVALID_OPTION(argv[i]));
@@ -107,7 +102,6 @@ static bool regex_get_and_set_boolean_value(bool *opt, char *option){
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
         if (regex_check_format(option, regex_tab_bool_option[i])){
             opt[i] = true;
-            printf("boolean number %d\n", i);
             return TRUE;
         }
     }
@@ -116,36 +110,44 @@ static bool regex_get_and_set_boolean_value(bool *opt, char *option){
 
 static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *option_value){
     regex_t reg;
-    regmatch_t groupArray[MAXGROUP + 1];
+    regmatch_t matches[MAXGROUP + 1];
 
     char *regex_tab_fullname_option[] = REGEX_LIST_FULLNAME_OPTION;
     char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
     char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
 
+
     for(int i = 0; i < 4; i++){
 
-        memset(groupArray, 0, sizeof(groupArray));
+        memset(matches, 0, sizeof(matches));
         if (regcomp(&reg, regex_tab_fullname_option[i], REG_EXTENDED) != 0)
             return FALSE;
-        int res = regexec(&reg, option_value, MAXGROUP, groupArray, 0);
+        int res = regexec(&reg, option_value, MAXGROUP, matches, 0);
         if (res == 0)
         {
-            if  (groupArray[0].rm_so == -1 || groupArray[0].rm_so == groupArray[0].rm_eo || \
-                groupArray[1].rm_so == -1 || groupArray[1].rm_so == groupArray[1].rm_eo){
+            if  (matches[0].rm_so == -1 || matches[0].rm_so == matches[0].rm_eo || \
+                matches[1].rm_so == -1 || matches[1].rm_so == matches[1].rm_eo){
                 regfree(&reg);
                 return FALSE;
             }
-            for(int option = 0; option < 4; option++){
-                if (regex_check_format(groupArray[0].rm_so, regex_tab_option_without_value[option])){
-                    if (!regex_check_format(groupArray[1].rm_so, regex_tab_option_value[option])){
+            
+            int length = matches[0].rm_eo - matches[0].rm_so;
+            char option[length + 1];
+            strncpy(option, option_value + matches[0].rm_so, length);
+            option[length] = '\0';
+
+            length = matches[1].rm_eo - matches[1].rm_so;
+            char value[length + 1];
+            strncpy(value, option_value + matches[1].rm_so, length);
+            value[length] = '\0';
+
+            for(int j = 0; j < 4; j++){
+                if (regex_check_format(option, regex_tab_option_without_value[j])){
+                    if (!regex_check_format(value, regex_tab_option_value[j])){
                         regfree(&reg);
-                        return puterr(ERROR_INVALID_VALUE(groupArray[1].rm_so));
+                        return puterr(ERROR_INVALID_VALUE(matches[1].rm_so));
                     }
-                    int length = matches[1].rm_eo - matches[1].rm_so;
-            char captured[length + 1];  // +1 pour le caractère nul
-            strncpy(captured, input + matches[1].rm_so, length);
-            captured[length] = '\0';
-                    set_value(opt, conf, option, (char *)groupArray[1].rm_so);
+                    set_value(opt, conf, i, value);
                     break;
                 }
             }
@@ -155,13 +157,12 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
     return TRUE;
 }
 
-
 bool regex_check_format(const char *testedStr, const char *regex)
 {
     regex_t reg;
 
     if (regcomp(&reg, regex, REG_EXTENDED) != 0){
-        perror("A problem occured compiling regex ");
+        perror("An error occured compiling regex ");
         return FALSE;
     }
     int res = regexec(&reg, testedStr, (size_t) 0, NULL, 0);
