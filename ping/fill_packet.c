@@ -1,7 +1,19 @@
 #include "includes/ping.h"
 
+static void    fill_payload(char *packet);
+static void    fill_icmp_msg(struct icmp *packet, t_conf *conf);
+static void    fill_ip_header(struct ip *packet, t_conf *conf);
+
+void    fill_packet(char *packet, t_conf *conf){
+
+    fill_ip_header((struct ip*)packet, conf);
+    fill_payload((char*)&packet);
+    fill_icmp_msg((struct icmp*)(&packet[IP_HEADER_LEN]), conf);
+
+}
+
 // fill the IP HEADER part of the packet (IP_HEADER_LEN = 20 bytes)
-void    fill_ip_header(struct ip *packet, t_conf *conf){
+static void    fill_ip_header(struct ip *packet, t_conf *conf){
     packet->ip_hl = IP_HEADER_LEN_IN_32BITS_INCREMENT;
     packet->ip_v = IP_VERSION;
     packet->ip_tos = 0;
@@ -19,7 +31,7 @@ void    fill_ip_header(struct ip *packet, t_conf *conf){
 }
 
 // fill the ICMP MESSAGE part of the packet ()
-void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
+static void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
     packet->icmp_type = ICMP_ECHO;
     packet->icmp_code = ICMP_ECHOREPLY;
     packet->icmp_cksum = 0;
@@ -34,7 +46,7 @@ void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
 }
 
 // fill the rest of the packet with payload data (40 bytes)
-void    fill_payload(char *packet){
+static void    fill_payload(char *packet){
     for(int i = (ICMP_PAYLOAD_STARTING_BYTE); i < PACKET_LEN; i++){
         packet[i] = i + '0';
     }

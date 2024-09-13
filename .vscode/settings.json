@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ping.h": "c",
+        "system_error": "c",
+        "regex": "c"
+    }
+}

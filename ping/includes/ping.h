@@ -32,6 +32,7 @@ typedef struct  s_conf  {
     pid_t                   id;
     int                     exit_status;
     long double             interval_time;      //in seconds
+    unsigned long int       timeout;
     int                     seq;
     struct sockaddr_in      dest;
     struct timeval          start_timestamp;
@@ -64,6 +65,7 @@ typedef struct  s_stats{
     unsigned int            nb_packets_received;
     double                  loss_percentage;
     long double             total_time_ms;
+    unsigned int            nb_error;
 //      rtt = round_trip delay
     float                   rtt_min;
     float                   rtt_max;
@@ -73,6 +75,8 @@ typedef struct  s_stats{
 
 /*          parse_argv_get_conf.c   */
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
+void resolve_dest_address(char *addr, t_conf *conf);
+
 
 /*          print_packet.c          */
 void    print_packet(char *packet);
@@ -81,9 +85,7 @@ void    print_packet(char *packet);
 bool init_socket(t_conf *conf);
 
 /*          fill_packet.c           */
-void    fill_ip_header(struct ip *ip_header,t_conf *conf);
-void    fill_icmp_msg(struct icmp *icmp_message, t_conf *conf);
-void    fill_payload(char *packet);
+void    fill_packet(char *packet, t_conf *conf);
 
 /*          compute_checksum.c      */
 short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
@@ -109,9 +111,8 @@ bool    puterr(char *error);
 void puterr_and_exit(char *error, int exit_code);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
-bool regex_check_format(const char *testedStr, const char *regex);
 
 /*          init_structs.c          */
-void    init_structs(t_conf *conf, t_opt *opt, t_stats *stats);
+void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
 
 #endif

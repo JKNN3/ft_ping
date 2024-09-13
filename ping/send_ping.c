@@ -9,9 +9,7 @@ void send_ping(t_conf *conf, t_stats *stats){
 
     gettimeofday(&conf->start_timestamp,NULL);
 
-    fill_ip_header((struct ip*)packet, conf);
-    fill_payload((char*)&packet);
-    fill_icmp_msg((struct icmp*)(&packet[IP_HEADER_LEN]), conf);
+    fill_packet(packet, conf);
 
     if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0){
         perror("ft_ping : sending packets ");
