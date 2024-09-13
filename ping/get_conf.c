@@ -29,8 +29,8 @@ static bool get_dest_addr(char *addr, t_conf *conf){
 
     conf->dest.sin_family = AF_INET;
     if (getaddrinfo(addr, NULL, &hints, &res)){
-        perror("getaddrinfo failed ");
         freeaddrinfo(res);
+        puterr_and_exit("ft_ping : unknown host\n", 1);
         return FALSE;
     }
 

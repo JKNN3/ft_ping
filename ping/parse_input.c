@@ -2,7 +2,7 @@
 
 static bool regex_get_and_set_boolean_value(bool *opt, char *option);
 static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *option_value);
-static bool regex_get_and_set_opt_value(t_opt *opt,  t_conf *conf, char *option, char *value);
+static bool regex_get_and_set_value(t_opt *opt,  t_conf *conf, char *option, char *value);
 static int  regex_check_option(char* arg);
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value);
 
@@ -11,6 +11,7 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
     for(int i = 1 ; argv[i]; i++){
 
         int ret = regex_check_option(argv[i]);
+        printf("ret regex_check_option is : %d\n", ret);
         switch (ret)
         {
         case BOOLEEN:
@@ -22,7 +23,7 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
         case OPTION_WITHOUT_VALUE:
             if (!argv[i + 1])
                 return puterr(ERROR_OPTION_REQUIRE_ARG(argv[i]));
-            regex_get_and_set_opt_value(opt, conf, argv[i], argv[++i]);
+            regex_get_and_set_value(opt, conf, argv[i], argv[++i]);
             break;
         case DEST:
             conf->dest_name_or_ip = argv[i];
@@ -33,7 +34,6 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
     }
     return TRUE;
 }
-
 
 static int regex_check_option(char* arg){
     if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION))
@@ -46,7 +46,6 @@ static int regex_check_option(char* arg){
         return DEST;
     return (-1); // handle error
 }
-
 
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
     const char *regex_tab_option_value[] = REGEX_LIST_OPTION_VALUE;
@@ -83,7 +82,7 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
     }
 }
 
-static bool regex_get_and_set_opt_value(t_opt *opt, t_conf *conf, char *option, char *value){
+static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char *value){
     int index_opt;
     const char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
 
@@ -161,10 +160,8 @@ bool regex_check_format(const char *testedStr, const char *regex)
 {
     regex_t reg;
 
-    if (regcomp(&reg, regex, REG_EXTENDED) != 0){
-        perror("An error occured compiling regex ");
-        return FALSE;
-    }
+    if (regcomp(&reg, regex, REG_EXTENDED | REG_NOSUB) != 0)
+        puterr_and_exit("An error occured compiling regex.\n", 1);
     int res = regexec(&reg, testedStr, (size_t) 0, NULL, 0);
     regfree(&reg);
     if (res == 0)

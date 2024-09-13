@@ -29,7 +29,7 @@ int main(int argc, char **argv){
     while(1){
 
         intercept_and_handle_signals();
-        send_ping(&conf);
+        send_ping(&conf, &stats);
         recv_pong(&conf, &stats);
 
         sleep(conf.interval_time);

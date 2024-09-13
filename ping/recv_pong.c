@@ -4,27 +4,26 @@ static double  compute_elapsed_time(struct timeval *start, struct timeval *end);
 static void update_stats(t_stats *stats, double rtt);
 
 int recv_pong(t_conf *conf, t_stats *stats){
-    static char packet_recv[84];
-    memset(&packet_recv, 0, PACKET_LEN);
-
-    int ret = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
-
-    stats->nb_packets_transmitted++;
+    static char     packet_recv[84];
     unsigned short  seq = 0;
 	struct timeval	time;
     int             ttl = 0;
     double          time_elapsed = 0.0;
+
     memset(&time, 0, sizeof(struct timeval));
+    memset(&packet_recv, 0, PACKET_LEN);
+
+    int ret = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
 
     seq = ((struct icmp *)(&packet_recv[IP_HEADER_LEN]))->icmp_seq;
+    int code = ((struct icmp *)(&packet_recv[IP_HEADER_LEN]))->icmp_code;
+    printf("code : %d\n", code);
     ttl = ((struct ip *)(packet_recv))->ip_ttl;
 	gettimeofday(&time, NULL);
     time_elapsed = compute_elapsed_time((void*)&(packet_recv[IP_HEADER_LEN + ICMP_HEADER_LEN]), &time);
 
-    // print_packet(packet_recv);
-    PRINT_PACKET_STATS(stats->dest_ip, seq, ttl, time_elapsed);
+    PRINT_PACKET_STATS(ret - IP_HEADER_LEN, stats->dest_ip, seq, ttl, time_elapsed);
     update_stats(stats, time_elapsed);
-    // beep();
     return 0;
 }
 

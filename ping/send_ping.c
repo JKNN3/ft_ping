@@ -1,6 +1,6 @@
 #include "includes/ping.h"
 
-void send_ping(t_conf *conf){
+void send_ping(t_conf *conf, t_stats *stats){
 
     char packet[PACKET_LEN];
 
@@ -13,11 +13,10 @@ void send_ping(t_conf *conf){
     fill_payload((char*)&packet);
     fill_icmp_msg((struct icmp*)(&packet[IP_HEADER_LEN]), conf);
 
-    // print_packet(packet);
-
     if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0){
-        perror("ping ");
-        exit(2);
+        perror("ft_ping : sending packets ");
+        exit(1);
     }
+    stats->nb_packets_transmitted++;
     return;
 }

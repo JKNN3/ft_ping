@@ -13,9 +13,9 @@ printf("PING %s (%s): %d data bytes, id %02x = %d\n", ip_arg, ip, bytes, id, id)
 
 /**     print packet stats      **/
 
-#define PRINT_PACKET_STATS(ip, seq, ttl, time) \
+#define PRINT_PACKET_STATS(bytes_recv, ip, seq, ttl, time) \
 printf("%d bytes from %s: icmp_seq=%hu ttl=%d time=%.3f ms\n", \
-                            ICMP_MSG_LEN, ip, seq, ttl, time);
+                            bytes_recv, ip, seq, ttl, time);
 
 
 /**     print final statistics  **/

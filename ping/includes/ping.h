@@ -89,7 +89,7 @@ void    fill_payload(char *packet);
 short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
 
 /*          send_ping.c             */
-void send_ping(t_conf *conf);
+void send_ping(t_conf *conf, t_stats *stats);
 
 /*          recv_pong.c             */
 int recv_pong(t_conf *conf, t_stats *stats);
@@ -106,6 +106,7 @@ void    intercept_and_handle_signals();
 t_stats *get_stats(bool get, t_stats *stats_struct);
 int     get_sockfd(bool get, int fd);
 bool    puterr(char *error);
+void puterr_and_exit(char *error, int exit_code);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 bool regex_check_format(const char *testedStr, const char *regex);
