@@ -17,6 +17,7 @@
 
 
 int main(int argc, char **argv){
+    
     t_conf  conf;
     t_stats stats;
     t_opt   opt;

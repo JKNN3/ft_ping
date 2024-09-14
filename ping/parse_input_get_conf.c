@@ -3,9 +3,9 @@
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt){
 
     init_structs_and_singletons(conf, opt, stats);
-
     if (!regex_parse_input(argv, opt, conf))
         return FALSE; // return usage
+
     stats->dest_ip = inet_ntoa(conf->dest.sin_addr);
     return TRUE;
 }

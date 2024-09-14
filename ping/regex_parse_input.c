@@ -38,6 +38,7 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 
 /*      check the arg format : boolean option, option and value, option=value   */
 static int regex_check_option(char* arg){
+
     if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION))
         return BOOLEEN;
     else if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE))
@@ -51,6 +52,7 @@ static int regex_check_option(char* arg){
 
 /*      check and set bool true for '-a' '--flood' options   */
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
+
     const char *regex_tab_bool_option[] = REGEX_LIST_BOOL_OPTION;
 
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
@@ -64,6 +66,7 @@ static bool regex_get_and_set_boolean_value(bool *opt, char *option){
 
 /*      check and get args from '-c 12' '--count 3' options   */
 static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char *value){
+
     int index_opt;
     const char *regex_tab_option_without_value[] = REGEX_LIST_OPTION;
 
@@ -78,6 +81,7 @@ static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char
 
 /*      check and get args from '--ttl=8978' options   */
 static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *option_value){
+
     regex_t reg;
     regmatch_t matches[MAXGROUP + 1];
 
@@ -120,6 +124,7 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
 /*      utils       */
 
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
+
     const char *regex_tab_option_value[] = REGEX_LIST_VALUE;
 
     switch (index_opt)

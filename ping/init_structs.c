@@ -15,6 +15,7 @@ void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats){
 }
 
 static void init_conf_struct(t_conf *conf){
+
     conf->id = getpid();
     conf->exit_status = 0;
     conf->interval_time = 1;
@@ -23,6 +24,7 @@ static void init_conf_struct(t_conf *conf){
 }
 
 static void init_stats_struct(t_stats *stats){
+
     stats->dest_ip = NULL;
     stats->nb_packets_transmitted = 0;
     stats->nb_packets_received = 0;
@@ -35,6 +37,7 @@ static void init_stats_struct(t_stats *stats){
 }
 
 static void init_opt_struct(t_opt *opt){
+
     opt->audible = false;
     opt->count = false;
     opt->debug = false;
@@ -47,6 +50,7 @@ static void init_opt_struct(t_opt *opt){
 }
 
 t_stats *get_stats(bool get, t_stats *stats_struct){
+
     static t_stats *stats_adress;
 
     if (get == TRUE)
@@ -58,6 +62,7 @@ t_stats *get_stats(bool get, t_stats *stats_struct){
 }
 
 int     get_sockfd(bool get, int fd){
+    
     static int sockfd;
 
     if (get == TRUE)

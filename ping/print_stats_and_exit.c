@@ -5,7 +5,6 @@ static double   compute_rtt_avg(t_stats *stats);
 
 
 void    print_stats_and_exit(t_stats *stats, int sockfd, int exit_status){
-
     print_final_stats(stats);
     close(sockfd);
     exit(exit_status);
@@ -34,16 +33,24 @@ void print_sigquit_stats(t_stats *stats){
 }
 
 static void     print_final_stats(t_stats *stats){
-
-    PRINT_FINAL_STATS(\
+    if (stats->nb_packets_received > 0)
+    {
+        PRINT_FINAL_STATS(\
+            stats->dest_ip,                                                               \
+            stats->nb_packets_transmitted,                                                \
+            stats->nb_packets_received,                                                   \
+            100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100), \
+            stats->rtt_min,                                                               \
+            (stats->total_time_ms / stats->nb_packets_received),                          \
+            stats->rtt_max,                                                               \
+            compute_rtt_avg(stats));
+        return;
+    }
+    PRINT_FINAL_STATS_NO_RECV(\
         stats->dest_ip,                                                               \
         stats->nb_packets_transmitted,                                                \
         stats->nb_packets_received,                                                   \
-        100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100), \
-        stats->rtt_min,                                                               \
-        (stats->total_time_ms / stats->nb_packets_received),                          \
-        stats->rtt_max,                                                               \
-        compute_rtt_avg(stats));
+        100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100));
 }
 
 static double   compute_rtt_avg(t_stats *stats){
