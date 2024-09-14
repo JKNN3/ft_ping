@@ -21,6 +21,7 @@ static void init_conf_struct(t_conf *conf){
     conf->interval_time = 1;
     conf->seq = 0;
     conf->ttl = 64;
+    conf->dest_name_or_ip = NULL;
 }
 
 static void init_stats_struct(t_stats *stats){
@@ -43,7 +44,6 @@ static void init_opt_struct(t_opt *opt){
     opt->debug = false;
     opt->flood = false;
     opt->help = false;
-    opt->print = false;
     opt->quiet = false;
     opt->usage = false;
     opt->verbose = false;

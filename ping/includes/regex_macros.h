@@ -5,13 +5,13 @@
 // ip regex
 // uns string pour check si c'est une option booléen
 
-# define REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION "^(-[a|d|f|?|v])|(--(debug)|(flood)|(help)|(print)|(quiet)|(usage)|(verbose))$"
+# define REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION "^(-[a|d|f|?|v])|(--(debug)|(flood)|(help)|(quiet)|(usage)|(verbose))$"
 # define REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE "^--(count|interval|timeout|ttl)=([ -~]*)$"
 # define REGEX_CHECK_ARG_TYPE_OPTION "^(--(count|inetrval|timeout|ttl))|(-[ciw]{1})$"
 # define REGEX_CHECK_ARG_DEST "^([0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3})|([*]*.[*]*)$"
 
 # define MAXGROUP               2
-# define NB_OF_BOOLEAN_OPTIONS  8
+# define NB_OF_BOOLEAN_OPTIONS  9
 
 # define REGEX_LIST_OPTION {\
     "^(-c)|(--count)$",\
@@ -25,11 +25,10 @@
     "^(-d)|(--debug)$",\
     "^(-c)|(--count)$",\
     "^(-f)|(--flood)$",\
-    "^(-?)|(--help)$",\
-    "^--print$",\
     "^--quiet$",\
     "^--usage$",\
-    "^(-v)|(--verbose)$"\
+    "^(-v)|(--verbose)$",\
+    "^(-?)|(--help)$",\
 };
 
 # define REGEX_LIST_VALUE {\

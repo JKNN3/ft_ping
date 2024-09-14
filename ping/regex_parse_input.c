@@ -6,13 +6,14 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
 static bool regex_get_and_set_value(t_opt *opt,  t_conf *conf, char *option, char *value);
 static bool regex_check_format(const char *testedStr, const char *regex);
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value);
+static void check_timeout_value(unsigned long int value, t_opt *opt);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 {
     for(int i = 1 ; argv[i]; i++){
 
         int ret = regex_check_option(argv[i]);
-        // printf("ret regex_check_option is : %d\n", ret);
+        // printf("ret regex_check_option is : %d for %s\n", ret, argv[i]);
         switch (ret)
         {
         case BOOLEEN:
@@ -52,11 +53,13 @@ static int regex_check_option(char* arg){
 
 /*      check and set bool true for '-a' '--flood' options   */
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
+    // if (regex_check_option())
 
     const char *regex_tab_bool_option[] = REGEX_LIST_BOOL_OPTION;
 
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
         if (regex_check_format(option, regex_tab_bool_option[i])){
+            // printf("opt is : %d for regex: %s\n", i, regex_tab_bool_option[i]);
             opt[i] = true;
             return TRUE;
         }
@@ -146,6 +149,7 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
             ERROR_INVALID_VALUE(value); return;
         }
         conf->timeout = strtoul(value, NULL, 10);
+        check_timeout_value(conf->timeout, opt);
         break;
     case TTL:
         if (!regex_check_format(value, regex_tab_option_value[TTL])){
@@ -170,4 +174,12 @@ static bool regex_check_format(const char *testedStr, const char *regex)
     if (res == 0)
         return TRUE;
     return FALSE;
+}
+
+static void check_timeout_value(unsigned long int value, t_opt *opt){
+    if (value > 2147483647)
+        puterr_and_exit(ERROR_TIMEOUT_VALUE_TOO_BIG(value), 1);
+    if (value == 0)
+        puterr_and_exit(ERROR_TIMEOUT_VALUE_TOO_SMALL(value), 1);
+    opt->timeout = true;
 }

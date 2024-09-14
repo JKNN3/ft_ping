@@ -295,5 +295,4 @@ The Exponentially Weighted Moving Average is an assumed basis that observations 
 Users can also give weight to the past data to find a different set of EWMA basis different weightage. Also, because of the geometrically displayed data, data doesn’t get affected much because of the outliers. Hence, more smoothed data can be achieved using this method.
 
 
-
-
+le parsing de ping check ttes les options, prend les dernières rentrées, et fait une liste des ip, puis envoie le ping avec les memes options pour toutes les adresses dans l'ordre l'une apres l'autre.

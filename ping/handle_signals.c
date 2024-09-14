@@ -16,12 +16,12 @@ static void handle_signals(int sig){
     t_stats *stats = get_stats(TRUE, NULL);
 
     if (sig == SIGQUIT){        // inetutils coredump and the iputils print stats so
-        if(stats->nb_packets_transmitted % 2 == 0) // % 0 ??? :clown:
+        if(stats->nb_packets_transmitted % 2 == 0){
             print_sigquit_stats(stats);
-        else
-            print_core_dump_and_exit(get_sockfd(1, 0));
+            return;
+        }
+        puterr_and_exit(ERROR_CORE_DUMP, 131);
+        return;
     }
-    else if (sig == SIGINT){
-        print_stats_and_exit(stats, get_sockfd(1, 0), 0);
-    }
+    print_stats_and_exit(stats, 0);
 }

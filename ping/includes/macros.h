@@ -12,7 +12,7 @@
 # define SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE   (1 << 14)   //set the 'dont fragment the packet' bit (bit 01) to true
 # define ICMP_TIMESTAMP_LEN                             16          // bytes
 # define ICMP_PAYLOAD_STARTING_BYTE                     44
-
+# define DATA_BYTES                                     56
 # define MAX(x, y)      x > y ? x : y
 # define MIN(x, y)      x < y ? x : y
 
@@ -21,6 +21,8 @@
 # define ERROR_INVALID_VALUE(value) "ft_ping: invalid value (`#value' near `#value')\n"
 # define ERROR_OPTION_REQUIRE_ARG(arg) "ping: option 'arg' requires an argument\nTry 'ping --help' or 'ping --usage' for more information."
 
-
+# define ERROR_CORE_DUMP "Quit (core dumped)\n"
+# define ERROR_TIMEOUT_VALUE_TOO_SMALL(value) "ft_ping: option value too small: #value"
+# define ERROR_TIMEOUT_VALUE_TOO_BIG(value) "ft_ping: option value too big: #value"
 
 #endif

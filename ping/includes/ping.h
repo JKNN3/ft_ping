@@ -24,8 +24,9 @@
 # include <stdbool.h>               // TRUE, FALSE 
 # include <float.h>                 // FLT_MAX, FLT_MIN
 # include <math.h>                 // sqrt()
-# include <signal.h>                // sigaction
-# include <curses.h> 
+# include <signal.h>                // sigaction, kill()
+
+# include <curses.h>                // faire marcher ce truc pttr huh
 
 typedef struct  s_conf  {
     int                     sockfd;
@@ -46,11 +47,11 @@ typedef struct option{
     bool                debug;      // -d, --debug
     bool                count;
     bool                flood;      // -f --flood
-    bool                help;       // -? --help
-    bool                print;      // --print
     bool                quiet;      // -q, --quiet 
     bool                usage;      // --usage
     bool                verbose;    // -v --verbose
+    bool                help;       // -? --help
+    bool                timeout;
 
 //    unsigned long int   count;      // -c --count=nb
 //    double              interval;   // -i --interval=nb 
@@ -75,11 +76,11 @@ typedef struct  s_stats{
 
 /*          parse_argv_get_conf.c   */
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
-void resolve_dest_address(char *addr, t_conf *conf);
+void    resolve_dest_address(char *addr, t_conf *conf);
 
 
 /*          print_packet.c          */
-void    print_packet(char *packet);
+void    print_packet_dump(char *packet);
 
 /*          socket.c                */
 bool init_socket(t_conf *conf);
@@ -94,11 +95,11 @@ short   compute_checksum(void *packet, int len); // len = longueur du packet en 
 void send_ping(t_conf *conf, t_stats *stats);
 
 /*          recv_pong.c             */
-int recv_pong(t_conf *conf, t_stats *stats);
+bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
 
 /*          print_stats_and_exit.c  */
-void    print_stats_and_exit(t_stats *stats, int sockfd, int exit_status);
-void    print_core_dump_and_exit(int sockfd);
+void    print_stats_and_exit(t_stats *stats, int exit_status);
+void    print_core_dump_and_exit();
 void    print_sigquit_stats(t_stats *stats);
 
 /*          handle_signals.c        */
@@ -108,11 +109,16 @@ void    intercept_and_handle_signals();
 t_stats *get_stats(bool get, t_stats *stats_struct);
 int     get_sockfd(bool get, int fd);
 bool    puterr(char *error);
-void puterr_and_exit(char *error, int exit_code);
+void    puterr_and_exit(char *error, int exit_code);
+void    print_header(t_opt *opt, t_conf *conf, t_stats *stats);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 
 /*          init_structs.c          */
 void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
+
+/*          fork if timeout  option.c    */
+void    fork_if_timeout(t_opt *opt, t_conf *conf);
+
 
 #endif

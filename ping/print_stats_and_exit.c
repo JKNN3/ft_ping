@@ -4,16 +4,10 @@ static void     print_final_stats(t_stats *stats);
 static double   compute_rtt_avg(t_stats *stats);
 
 
-void    print_stats_and_exit(t_stats *stats, int sockfd, int exit_status){
+void    print_stats_and_exit(t_stats *stats, int exit_status){
     print_final_stats(stats);
-    close(sockfd);
+    close(get_sockfd(1, 0));
     exit(exit_status);
-}
-
-void    print_core_dump_and_exit(int sockfd){
-    write(2, "Quit (core dumped)\n", 20);
-    close(sockfd);
-    exit(131);
 }
 
 void print_sigquit_stats(t_stats *stats){
@@ -22,13 +16,14 @@ void print_sigquit_stats(t_stats *stats){
     fflush(stdout);
 
     PRINT_SIGQUIT_STATS( \
-        stats->nb_packets_transmitted,  \
-        stats->nb_packets_received,     \
-        100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100), \
-        stats->rtt_min,                 \
-        compute_rtt_avg(stats),         \
-        2.4,                            \
-        stats->rtt_max                  \
+        stats->nb_packets_transmitted,                                              \
+        stats->nb_packets_received,                                                 \
+        (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)     \
+                 / stats->nb_packets_transmitted),                                  \
+        stats->rtt_min,                                                             \
+        compute_rtt_avg(stats),                                                     \
+        2.4,                                                                        \
+        stats->rtt_max                                                              \
     );
 }
 
@@ -39,7 +34,8 @@ static void     print_final_stats(t_stats *stats){
             stats->dest_ip,                                                               \
             stats->nb_packets_transmitted,                                                \
             stats->nb_packets_received,                                                   \
-            100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100), \
+            (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \
+                     / stats->nb_packets_transmitted),                                    \
             stats->rtt_min,                                                               \
             (stats->total_time_ms / stats->nb_packets_received),                          \
             stats->rtt_max,                                                               \
@@ -50,7 +46,8 @@ static void     print_final_stats(t_stats *stats){
         stats->dest_ip,                                                               \
         stats->nb_packets_transmitted,                                                \
         stats->nb_packets_received,                                                   \
-        100 - ((stats->nb_packets_received / (stats->nb_packets_transmitted)) * 100));
+        (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \
+                 / stats->nb_packets_transmitted));
 }
 
 static double   compute_rtt_avg(t_stats *stats){

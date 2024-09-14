@@ -16,49 +16,53 @@ static const char	*icmp_errors[] =
 	[ICMP_ADDRESSREPLY]		= "Address Mask Reply"
 };
 
-static bool     check_packet_receveid(char *packet_recv, int bytes_recv, t_stats *stats);
-static void     print_packet_stats_update_stats( t_stats *stats, char *packet_recv, int ret);
+static bool     check_packet_received(char *packet, int bytes_recv, t_stats *stats, t_opt *opt);
+static void     print_and_update_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
 static double   compute_elapsed_time(struct timeval *start);
 static void     update_stats(t_stats *stats, double rtt);
 
-int recv_pong(t_conf *conf, t_stats *stats){
+bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
 
     static char     packet_recv[84];
 
     memset(&packet_recv, 0, PACKET_LEN);
     int ret = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
-
-    if (!check_packet_receveid(packet_recv, ret, stats)){
+    if (!check_packet_received(packet_recv, ret, stats, opt))
         return FALSE;
-    }
-    print_packet_stats_update_stats(stats, packet_recv, ret);
-    return 0;
+
+    print_and_update_stats(stats, packet_recv, ret, opt);
+    return TRUE;
 }
 
-static bool check_packet_receveid(char *packet_recv, int bytes_recv, t_stats *stats){
-    int type = ((struct icmp *)(&packet_recv[IP_HEADER_LEN]))->icmp_type;
+static bool check_packet_received(char *packet, int bytes_recv, t_stats *stats, t_opt *opt){
+
+    int type = ((struct icmp *)(&packet[IP_HEADER_LEN]))->icmp_type;
 
     if (type > 0){
         PRINT_PACKET_ERR(bytes_recv - IP_HEADER_LEN, stats->dest_ip, icmp_errors[type]);
+        if (opt->verbose)
+            print_packet_dump(packet);
         return FALSE;
     }
     return TRUE;
 }
 
-static void     print_packet_stats_update_stats( t_stats *stats, char *packet_recv, int ret){
+static void print_and_update_stats( t_stats *stats, char *packet, int ret, t_opt *opt){
+
     unsigned short  seq = 0;
     int             ttl = 0;
     double          time_elapsed = 0.0;
 
-    seq = ((struct icmp *)(&packet_recv[IP_HEADER_LEN]))->icmp_seq;
-    ttl = ((struct ip *)(packet_recv))->ip_ttl;
-    time_elapsed = compute_elapsed_time((void*)&(packet_recv[IP_HEADER_LEN + ICMP_HEADER_LEN]));
-
-    PRINT_PACKET_STATS(ret - IP_HEADER_LEN, stats->dest_ip, seq, ttl, time_elapsed);
+    seq = ((struct icmp *)(&packet[IP_HEADER_LEN]))->icmp_seq;
+    ttl = ((struct ip *)(packet))->ip_ttl;
+    time_elapsed = compute_elapsed_time((void*)&(packet[IP_HEADER_LEN + ICMP_HEADER_LEN]));
+    if (!opt->quiet && !opt->flood)
+        PRINT_PACKET_STATS(ret - IP_HEADER_LEN, stats->dest_ip, seq, ttl, time_elapsed);
     update_stats(stats, time_elapsed);
 };
 
 static double   compute_elapsed_time(struct timeval *start){
+
     struct timeval	end;
     double          time_elapsed = 0.0;
 
@@ -71,6 +75,7 @@ static double   compute_elapsed_time(struct timeval *start){
 }
 
 static void     update_stats(t_stats *stats, double rtt){
+
     stats->total_time_ms += rtt;
     stats->nb_packets_received++;
     stats->rtt_sq_total += rtt*rtt;
