@@ -6,7 +6,7 @@
     - find why everything is double when localhost
     - compute stddev
     - le hexdump de verbose
-    - pouvoir mettre plusieurs argum,ents a la suite genre -fq etc
+    - pouvoir mettre plusieurs argum,ents a la suite genre -fq etc, rajouter REGEX_CHECK_ARG_QUEUE
 
         options:
     - audible
