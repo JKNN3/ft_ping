@@ -19,5 +19,6 @@ bool init_socket(t_conf *conf){
         perror("setsockopt IP_TTL failed ");
         return FALSE;
     }
+    
     return TRUE;
 }

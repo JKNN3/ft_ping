@@ -32,7 +32,7 @@ void resolve_dest_address(char *addr, t_conf *conf){
     conf->dest.sin_family = AF_INET;
     if (getaddrinfo(addr, NULL, &hints, &res)){
         freeaddrinfo(res);
-        puterr_and_exit("ft_ping : unknown host\n", 1);
+        puterr_and_exit(ERROR_UNKNOWN_HOST, 1);
     }
 
     conf->dest_name_or_ip = addr;
@@ -60,6 +60,6 @@ static bool check_if_user_is_root(t_conf *conf){
         conf->interval_time = 0;
         return TRUE;
     }
-    puterr_and_exit("need to be root\n", 0); // essayer de voir plus tard siy'a un truc avec jsp temporaire pcq jsp
+    puterr_and_exit(ERROR_NEED_TO_BE_ROOT, 0); // essayer de voir plus tard siy'a un truc avec jsp temporaire pcq jsp
     return FALSE;
 }

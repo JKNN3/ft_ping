@@ -296,3 +296,10 @@ Users can also give weight to the past data to find a different set of EWMA basi
 
 
 le parsing de ping check ttes les options, prend les dernières rentrées, et fait une liste des ip, puis envoie le ping avec les memes options pour toutes les adresses dans l'ordre l'une apres l'autre.
+
+so debug so dontroute traceroute explanation
+https://stackoverflow.com/questions/37965705/so-debug-and-so-dontroute-in-traceroute
+
+ping and traceroute animated
+
+https://www.youtube.com/watch?v=vJV-GBZ6PeM

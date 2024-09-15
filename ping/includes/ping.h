@@ -23,7 +23,7 @@
 # include <stdlib.h>                // malloc
 # include <stdbool.h>               // TRUE, FALSE 
 # include <float.h>                 // FLT_MAX, FLT_MIN
-# include <math.h>                 // sqrt()
+# include <math.h>                  // sqrt()
 # include <signal.h>                // sigaction, kill()
 
 # include <curses.h>                // faire marcher ce truc pttr huh
@@ -34,7 +34,7 @@ typedef struct  s_conf  {
     int                     exit_status;
     long double             interval_time;      //in seconds
     unsigned long int       timeout;
-    int                     seq;
+    unsigned long int       seq;
     struct sockaddr_in      dest;
     struct timeval          start_timestamp;
     char                    *dest_name_or_ip;
@@ -45,13 +45,13 @@ typedef struct  s_conf  {
 typedef struct option{
     bool                audible;    // -a
     bool                debug;      // -d, --debug
-    bool                count;
     bool                flood;      // -f --flood
     bool                quiet;      // -q, --quiet 
     bool                usage;      // --usage
     bool                verbose;    // -v --verbose
     bool                help;       // -? --help
     bool                timeout;
+    bool                count;
 
 //    unsigned long int   count;      // -c --count=nb
 //    double              interval;   // -i --interval=nb 
@@ -109,7 +109,7 @@ void    intercept_and_handle_signals();
 t_stats *get_stats(bool get, t_stats *stats_struct);
 int     get_sockfd(bool get, int fd);
 bool    puterr(char *error);
-void    puterr_and_exit(char *error, int exit_code);
+void    puterr_and_exit(int err, int exit_code);
 void    print_header(t_opt *opt, t_conf *conf, t_stats *stats);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);

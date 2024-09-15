@@ -7,9 +7,7 @@ bool puterr(char *error){
     return FALSE;
 }
 
-void puterr_and_exit(char *error, int exit_code){
-    
-    write(2, error, strlen(error));
+void puterr_and_exit(int err, int exit_code){
     close(get_sockfd(1, 0));
     exit(exit_code);
 }

@@ -3,14 +3,15 @@
 /*
           TO DO
 
+recommencer parsing
+
     - find why everything is double when localhost
     - compute stddev
     - le hexdump de verbose
-    - pouvoir mettre plusieurs argum,ents a la suite genre -fq etc, rajouter REGEX_CHECK_ARG_QUEUE
+    - remplacer dans les print les #otp #value par leurs valeurs en faisant un printf ou quoi
 
         options:
     - audible
-    - debug
     - count         trouver comment faire sans checker a chaque tour de boucle
     - flood         OK reste a savoir si il faut laisser le root check ou pas
     - help          OK
@@ -38,6 +39,8 @@ k: ping -print  1.1.1.1
 */
 # include <math.h>
 
+static bool check_count_option(t_conf *conf);
+
 
 int main(int argc, char **argv){
 
@@ -53,6 +56,9 @@ int main(int argc, char **argv){
 
     while(1){
 
+        if (opt.count)
+            check_count_option(&conf);
+
         intercept_and_handle_signals();
         send_ping(&conf, &stats);
         recv_pong(&conf, &stats, &opt);
@@ -60,4 +66,10 @@ int main(int argc, char **argv){
         sleep(conf.interval_time);
     }
     print_stats_and_exit(&stats, conf.exit_status);
+}
+
+static bool check_count_option(t_conf *conf){
+    if (conf->nb_packets_to_send != 0 && conf->nb_packets_to_send == conf->seq)
+        return FALSE;
+    return TRUE;
 }

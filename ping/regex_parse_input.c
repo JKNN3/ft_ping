@@ -7,16 +7,17 @@ static bool regex_get_and_set_value(t_opt *opt,  t_conf *conf, char *option, cha
 static bool regex_check_format(const char *testedStr, const char *regex);
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value);
 static void check_timeout_value(unsigned long int value, t_opt *opt);
+static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *index);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 {
     for(int i = 1 ; argv[i]; i++){
 
         int ret = regex_check_option(argv[i]);
-        // printf("ret regex_check_option is : %d for %s\n", ret, argv[i]);
+        // printf("ret regex_check_optionis : %d for %s\n", ret, argv[i]);
         switch (ret)
         {
-        case BOOLEEN:
+        case BOOLEAN:
             regex_get_and_set_boolean_value((bool*)opt, argv[i]);
             break;
         case OPTION_WITH_VALUE:
@@ -24,14 +25,17 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
             break;
         case OPTION_WITHOUT_VALUE:
             if (!argv[i + 1])
-                return puterr(ERROR_OPTION_REQUIRE_ARG(argv[i]));
+                puterr_and_exit(ERROR_OPTION_REQUIRE_ARG(argv[i]), 64);
             regex_get_and_set_value(opt, conf, argv[i], argv[++i]);
+            break;
+        case OPTION_QUEUE:
+            manage_options_queue(opt, conf, argv, &i);
             break;
         case DEST:
             resolve_dest_address(argv[i], conf);
             break;
         case ERROR:
-            return puterr(ERROR_INVALID_OPTION(argv[i]));
+            puterr_and_exit(ERROR_INVALID_OPTION(argv[i]), 64);
         }
     }
     return TRUE;
@@ -40,15 +44,19 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 /*      check the arg format : boolean option, option and value, option=value   */
 static int regex_check_option(char* arg){
 
-    if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_BOOLEEN_OPTION))
-        return BOOLEEN;
+    if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_BOOLEAN_OPTION))
+        return BOOLEAN;
     else if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE))
         return OPTION_WITH_VALUE;
     else if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_OPTION))
         return OPTION_WITHOUT_VALUE;
+    else if (regex_check_format(arg, REGEX_CHECK_ARG_QUEUE))
+        return OPTION_QUEUE;
+    else if (regex_check_format(arg, REGEX_CHECK_OPTION))
+        return ERROR;
     else if (regex_check_format(arg, REGEX_CHECK_ARG_DEST))
         return DEST;
-    return (-1); // handle error
+    return (ERROR);
 }
 
 /*      check and set bool true for '-a' '--flood' options   */
@@ -59,7 +67,6 @@ static bool regex_get_and_set_boolean_value(bool *opt, char *option){
 
     for( int i = 0; i < NB_OF_BOOLEAN_OPTIONS; i++){
         if (regex_check_format(option, regex_tab_bool_option[i])){
-            // printf("opt is : %d for regex: %s\n", i, regex_tab_bool_option[i]);
             opt[i] = true;
             return TRUE;
         }
@@ -95,7 +102,6 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
         memset(matches, 0, (3 * sizeof(regmatch_t)));
         if (regcomp(&reg, regex_tab_fullname_option[i], REG_EXTENDED) != 0)
             return FALSE;
-            // printf("je passe ici nb %d, option value is %s\n", i, option_value);
         int res = regexec(&reg, option_value, MAXGROUP + 1, matches, 0);
         if (res == 0)
         {
@@ -108,17 +114,13 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
             char option[length + 1];
             strncpy(option, option_value + matches[1].rm_so, length);
             option[length] = '\0';
-            // printf("option: %s\n", option);
             length = matches[2].rm_eo - matches[2].rm_so;
             char value[length + 1];
             strncpy(value, option_value + matches[2].rm_so, length);
             value[length] = '\0';
-            // printf("value: %s\n", value);
 
             regex_get_and_set_value(opt, conf, option, value);
         }
-        // else
-            // printf("no match\n");
         regfree(&reg);
     }
     return TRUE;
@@ -126,40 +128,39 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
 
 /*      utils       */
 
-static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value){
+static void set_value(t_opt *opt, t_conf *conf, int index_opt, char*value){
 
     const char *regex_tab_option_value[] = REGEX_LIST_VALUE;
-
     switch (index_opt)
     {
-    case COUNT:
-        if (regex_check_format(value, regex_tab_option_value[COUNT])){
-            conf->nb_packets_to_send = strtoull(value, NULL, 10);
-            opt->count = TRUE;
+        case COUNT:
+            if (regex_check_format(value, regex_tab_option_value[COUNT])){
+                conf->nb_packets_to_send = strtoull(value, NULL, 10);
+                opt->count = TRUE;
+            }
+            break;
+        case INTERVAL:
+            if (!regex_check_format(value, regex_tab_option_value[INTERVAL])){
+                ERROR_INVALID_VALUE(value); return;
+            }
+            conf->interval_time = strtold(value, NULL);
+            break;
+        case TIMEOUT:
+            if (!regex_check_format(value, regex_tab_option_value[TIMEOUT])){
+                ERROR_INVALID_VALUE(value); return;
+            }
+            conf->timeout = strtoul(value, NULL, 10);
+            check_timeout_value(conf->timeout, opt);
+            break;
+        case TTL:{
+            if (!regex_check_format(value, regex_tab_option_value[TTL]))
+                puterr_and_exit(ERROR_INVALID_VALUE(value), 1);
+            
+            conf->ttl = strtoul(value, NULL, 10);
+            if (strlen(value) > 4 || conf->ttl > 255)
+                puterr_and_exit(ERROR_TTL_TOO_BIG(value), 1);
+            break;
         }
-        break;
-    case INTERVAL:
-        if (!regex_check_format(value, regex_tab_option_value[INTERVAL])){
-            ERROR_INVALID_VALUE(value); return;
-        }
-        conf->interval_time = strtold(value, NULL);
-        break;
-    case TIMEOUT:
-        if (!regex_check_format(value, regex_tab_option_value[TIMEOUT])){
-            ERROR_INVALID_VALUE(value); return;
-        }
-        conf->timeout = strtoul(value, NULL, 10);
-        check_timeout_value(conf->timeout, opt);
-        break;
-    case TTL:
-        if (!regex_check_format(value, regex_tab_option_value[TTL])){
-            ERROR_INVALID_VALUE(value); return;
-        }
-        conf->ttl = atoi(value);
-        if (conf->ttl > 255){
-            ERROR_TTL_TOO_BIG(conf->ttl); return;
-        }
-        break;
     }
 }
 /*      return true if the arg match with the regex, false otherwise    */
@@ -168,7 +169,7 @@ static bool regex_check_format(const char *testedStr, const char *regex)
     regex_t reg;
 
     if (regcomp(&reg, regex, REG_EXTENDED | REG_NOSUB) != 0)
-        puterr_and_exit("An error occured compiling regex.\n", 1);
+        puterr_and_exit(ERROR_COMPILING_REGEX, 1);
     int res = regexec(&reg, testedStr, (size_t) 0, NULL, 0);
     regfree(&reg);
     if (res == 0)
@@ -182,4 +183,21 @@ static void check_timeout_value(unsigned long int value, t_opt *opt){
     if (value == 0)
         puterr_and_exit(ERROR_TIMEOUT_VALUE_TOO_SMALL(value), 1);
     opt->timeout = true;
+}
+
+static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *index){
+
+    for(int i = 1; argv[*index][i]; i++){
+        char arg[2] = {argv[*index][i], '\0'};
+
+        if (regex_get_and_set_boolean_value((bool*)opt, arg))
+            continue;
+        else if (!argv[*index + 1])
+            return puterr_and_exit(ERROR_OPTION_REQUIRE_ARG(argv[*index]), 64);
+        else if (argv[*index][i + 1])
+            return puterr_and_exit(ERROR_INVALID_VALUE(&argv[*index][i + 1]), 1);
+        else if (regex_get_and_set_value(opt, conf, arg, argv[++(*index)])){
+            return;
+        }
+    }
 }

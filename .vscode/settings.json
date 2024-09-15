@@ -12,6 +12,7 @@
         "utility": "c",
         "cmath": "c",
         "*.tcc": "c",
-        "optional": "c"
+        "optional": "c",
+        "macros.h": "c"
     }
 }

@@ -29,7 +29,8 @@ bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
     int ret = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
     if (!check_packet_received(packet_recv, ret, stats, opt))
         return FALSE;
-
+    // if (opt->audible)
+    //     printf("\a");
     print_and_update_stats(stats, packet_recv, ret, opt);
     return TRUE;
 }
