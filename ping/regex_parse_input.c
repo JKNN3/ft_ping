@@ -84,6 +84,7 @@ static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char
         if (regex_check_format(option, regex_tab_option_without_value[index_opt]))
             break;
     }
+    // printf("regex is %s for value %s\n", regex_tab_option_without_value[index_opt], value);
     set_value(opt, conf, index_opt, value);
 
     return TRUE;

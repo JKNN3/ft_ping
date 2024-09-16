@@ -7,7 +7,14 @@ bool init_socket(t_conf *conf){
         perror("socket() failed ");
         return FALSE;
     }
-
+    struct timeval timeout;      
+    timeout.tv_sec = 4;
+    timeout.tv_usec = 0;
+    
+    if (setsockopt (conf->sockfd, SOL_SOCKET, SO_RCVTIMEO, &timeout,sizeof timeout) < 0){
+        perror("setsockopt SO_RCVTIMEO failed ");
+        return FALSE;
+    }
     int opt_value = 1;
     if (setsockopt(conf->sockfd, IPPROTO_IP, IP_HDRINCL, &opt_value, sizeof(int)) != 0){
         perror("setsockopt IP_HDRINCL failed ");

@@ -97,8 +97,8 @@ void send_ping(t_conf *conf, t_stats *stats);
 /*          recv_pong.c             */
 bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
 
-/*          print_stats_and_exit.c  */
-void    print_stats_and_exit(t_stats *stats, int exit_status);
+/*          print_final_stats_and_exit.c  */
+void    print_final_stats_and_exit(t_stats *stats, int exit_status);
 void    print_core_dump_and_exit();
 void    print_sigquit_stats(t_stats *stats);
 
@@ -120,5 +120,7 @@ void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
 /*          fork if timeout  option.c    */
 void    fork_if_timeout(t_opt *opt, t_conf *conf);
 
+/*          print and update packet stats    */
+void print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
 
 #endif

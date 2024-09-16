@@ -54,10 +54,10 @@ int main(int argc, char **argv){
     print_header(&opt, &conf, &stats);
     fork_if_timeout(&opt, &conf);
 
-    while(1){
+    while(TRUE){
 
-        if (opt.count)
-            check_count_option(&conf);
+        if (opt.count && !check_count_option(&conf))
+                break;
 
         intercept_and_handle_signals();
         send_ping(&conf, &stats);
@@ -65,7 +65,7 @@ int main(int argc, char **argv){
 
         sleep(conf.interval_time);
     }
-    print_stats_and_exit(&stats, conf.exit_status);
+    print_final_stats_and_exit(&stats, conf.exit_status);
 }
 
 static bool check_count_option(t_conf *conf){

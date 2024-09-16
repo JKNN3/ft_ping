@@ -17,7 +17,6 @@ bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *o
     return TRUE;
 }
 
-
 void resolve_dest_address(char *addr, t_conf *conf){
     if (conf->dest_name_or_ip != NULL) return;
 

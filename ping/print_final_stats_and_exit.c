@@ -4,7 +4,7 @@ static void     print_final_stats(t_stats *stats);
 static double   compute_rtt_avg(t_stats *stats);
 
 
-void    print_stats_and_exit(t_stats *stats, int exit_status){
+void    print_final_stats_and_exit(t_stats *stats, int exit_status){
     print_final_stats(stats);
     close(get_sockfd(1, 0));
     exit(exit_status);

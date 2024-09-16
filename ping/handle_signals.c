@@ -23,5 +23,5 @@ static void handle_signals(int sig){
         puterr_and_exit(ERROR_CORE_DUMP, 131);
         return;
     }
-    print_stats_and_exit(stats, 0);
+    print_final_stats_and_exit(stats, 0);
 }

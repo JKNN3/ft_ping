@@ -19,7 +19,7 @@ static void    fill_ip_header(struct ip *packet, t_conf *conf){
     packet->ip_v = IP_VERSION;
     packet->ip_tos = 0;
     packet->ip_len = htons(IP_HEADER_LEN);
-    packet->ip_id = htons(IP_ID);
+    packet->ip_id = htons(conf->id & 0xFFFF);
     short off = 0;
     off = SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE;
     packet->ip_off = htons(off);
