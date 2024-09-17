@@ -19,39 +19,27 @@ static const char	*icmp_errors[] =
 	[ICMP_ADDRESS]			= "Address Mask Request",
 	[ICMP_ADDRESSREPLY]		= "Address Mask Reply"
 };
-    // if (opt->audible)
-    //     printf("\a");
-
 
 bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
 
     static char     packet_recv[PACKET_LEN];
 
         memset(packet_recv, 0, PACKET_LEN);
-        fd_set socks;
-        FD_ZERO(&socks);
-        FD_SET(conf->sockfd, &socks); 
-        struct timeval tv = {0, 4};
-        select(0, &socks, NULL, NULL, &tv);
-        if  ( FD_ISSET(conf->sockfd, &socks) )
-        {
 
+        while(TRUE){
 
             int bytes_recv = receive_packet(conf, packet_recv);
             if (bytes_recv < 0){
                 printf("timeout\n");
                 return FALSE;
             }
+            // if (opt->audible)
+            //     printf("\a");
             printf("bytes reçus: %d\n", bytes_recv);
-            if (check_packet_received(packet_recv, bytes_recv, stats, opt, conf)){
+            if (check_packet_received(packet_recv, bytes_recv, stats, opt, conf))
                 print_and_update_packet_stats(stats, packet_recv, bytes_recv, opt);
-                return TRUE;
-            }
-        }
-        else{
             return TRUE;
         }
-
     return TRUE;
 }
 

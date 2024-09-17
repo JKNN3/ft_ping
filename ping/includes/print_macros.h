@@ -21,11 +21,11 @@ printf("%d bytes from %s: %s\n", bytes_recv, ip, err);
 /**     print final statistics  **/
 
 # define PRINT_FINAL_STATS(ip, nb_packets_sent, nb_packets_recv, loss_percentage,  \
-                                rtt_min, rtt_avg, rtt_max, rtt_mdev)        \
+                                rtt_min, rtt_avg, rtt_max, rtt_stddev)        \
 printf("--- %s ping statistics ---\n\
 %d packets transmitted, %d packets received, %d%% packet loss\n\
 round-trip min/avg/max/stddev = %.3f/%.3Lf/%.3f/%.3f ms\n",\
-ip, nb_packets_sent, nb_packets_recv, loss_percentage, rtt_min, rtt_avg, rtt_max, rtt_mdev);
+ip, nb_packets_sent, nb_packets_recv, loss_percentage, rtt_min, rtt_avg, rtt_max, rtt_stddev);
 
 #define PRINT_FINAL_STATS_NO_RECV(ip, nb_packets_sent, nb_packets_recv, loss_percentage)\
 printf("--- %s ping statistics ---\n\

@@ -3,12 +3,7 @@
 /*
           TO DO
 
-recommencer parsing
-
-    - find why everything is double when localhost
-    - compute stddev
     - le hexdump de verbose
-    - remplacer dans les print les #otp #value par leurs valeurs en faisant un printf ou quoi
 
         options:
     - audible

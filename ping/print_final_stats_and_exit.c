@@ -1,7 +1,7 @@
 #include "includes/ping.h"
 
 static void     print_final_stats(t_stats *stats);
-static double   compute_rtt_avg(t_stats *stats);
+static double   compute_stddev(t_stats *stats);
 
 
 void    print_final_stats_and_exit(t_stats *stats, int exit_status){
@@ -21,7 +21,7 @@ void print_sigquit_stats(t_stats *stats){
         (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)     \
                  / stats->nb_packets_transmitted),                                  \
         stats->rtt_min,                                                             \
-        compute_rtt_avg(stats),                                                     \
+        compute_stddev(stats),                                                     \
         2.4,                                                                        \
         stats->rtt_max                                                              \
     );
@@ -39,7 +39,7 @@ static void     print_final_stats(t_stats *stats){
             stats->rtt_min,                                                               \
             (stats->total_time_ms / stats->nb_packets_received),                          \
             stats->rtt_max,                                                               \
-            compute_rtt_avg(stats));
+            compute_stddev(stats));
         return;
     }
     PRINT_FINAL_STATS_NO_RECV(\
@@ -50,15 +50,14 @@ static void     print_final_stats(t_stats *stats){
                  / stats->nb_packets_transmitted));
 }
 
-static double   compute_rtt_avg(t_stats *stats){
+static double   compute_stddev(t_stats *stats){
 
     double average_rtt;
     double average_of_squared_rtt;
     double mdev;
-
     average_rtt = stats->total_time_ms / stats->nb_packets_received;
     average_of_squared_rtt = stats->rtt_sq_total / stats->nb_packets_received;
     mdev = sqrt((average_of_squared_rtt - (average_rtt * average_rtt)));
-  
+
     return mdev;
 }
