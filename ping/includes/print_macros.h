@@ -72,7 +72,5 @@ for any corresponding short options.\n\
 \n\
 Options marked with (root only) are available only to superuser.\n");
 
-# define PACKET_DUMP_IP_HEADER "IP Hdr Dump:\n"
-# define PACKET_DUMP_IP_DETAILS "Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src	Dst	Data\n"
 
 #endif

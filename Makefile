@@ -9,14 +9,14 @@ SRC		= 	ping/main.c						\
 			ping/regex_parse_input.c		\
 			ping/fill_packet.c				\
 			ping/compute_checksum.c			\
-			ping/print_packet.c				\
+			ping/print_packet_sent_dump.c	\
 			ping/socket.c					\
 			ping/send_ping.c				\
 			ping/recv_pong.c				\
 			ping/utils.c					\
 			ping/print_final_stats_and_exit.c		\
 			ping/print_and_update_packet_stats.c\
-			ping/fork_if_timeout_option.c	\
+			ping/create_thread_if_timeout.c	\
 
 OBJ 	=	${SRC:.c=.o}
 

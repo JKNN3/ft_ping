@@ -27,7 +27,7 @@ https://sites.uclouvain.be/SystInfo/usr/include/linux/icmp.h.html
 
 https://manpages.debian.org/stretch/inetutils-ping/ping.1.en.html
 
-Ping uses the ICMP protocol's mandatory ECHO_REQUEST datagram to elicit an ICMP ECHO_RESPONSE from a host or gateway. ECHO_REQUEST datagrams (``pings'') have an IP and ICMP header, followed by a “struct timeval” and then an arbitrary number of ``pad'' bytes used to fill out the packet.
+
 
 socket() crée un point de communication, et renvoie un descripteur.
 
@@ -74,7 +74,6 @@ When a client searches for a hostname—typically through a web browser—their 
 
 
 
-sscanf() pour le parsing trooop bien!!
 
 
 https://github.com/dgibson/iputils/blob/master/ping_common.c

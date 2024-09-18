@@ -4,10 +4,11 @@
 # include "macros.h"
 # include "regex_macros.h"
 # include "print_macros.h"
+# include "errors.h"
 
-# include <stdio.h>                 // printf
-# include <string.h>                // memset()
-# include <regex.h> 
+# include <stdio.h>                 // printf(), sprintf(), fprintf()
+# include <string.h>                // memset(), memcpy()
+# include <regex.h>                 // regex_t, regcomp(), regexec(), regmatch(), regfree()
 # include <unistd.h>                // write()
 # include <sys/types.h> 
 # include <sys/socket.h>    
@@ -17,16 +18,20 @@
 # include <netinet/ip_icmp.h>       // struct icmp
 # include <arpa/inet.h>             // inet_ntop()
 # include <sys/time.h>              // gettimeofday()
-# include <errno.h>
+# include <errno.h>                 // perror()
 # include <sys/ioctl.h>             // ioctl() and ifreq struct
-# include <net/if.h>                // IFNAMSIZ constant
-# include <stdlib.h>                // malloc
-# include <stdbool.h>               // TRUE, FALSE 
+# include <stdlib.h>                // malloc()
+# include <stdbool.h>               // bool, TRUE, FALSE 
 # include <float.h>                 // FLT_MAX, FLT_MIN
 # include <math.h>                  // sqrt()
 # include <signal.h>                // sigaction, kill()
+# include <pthread.h>               // pthread_t, pthread_create()
 
-# include <curses.h>                // faire marcher ce truc pttr huh
+# undef TRUE
+# define TRUE    1
+# undef FALSE
+# define FALSE   0
+
 
 typedef struct  s_conf  {
     int                     sockfd;
@@ -44,20 +49,15 @@ typedef struct  s_conf  {
 }               t_conf ; 
 
 typedef struct option{
-    bool                audible;    // -a
-    bool                debug;      // -d, --debug
-    bool                flood;      // -f --flood
-    bool                quiet;      // -q, --quiet 
-    bool                usage;      // --usage
-    bool                verbose;    // -v --verbose
-    bool                help;       // -? --help
+    bool                audible;
+    bool                debug;
+    bool                flood;
+    bool                quiet;
+    bool                usage;
+    bool                verbose;
+    bool                help;
     bool                timeout;
     bool                count;
-
-//    unsigned long int   count;      // -c --count=nb
-//    double              interval;   // -i --interval=nb 
-//    unsigned long int   timeout;    // -w, --timeout=N
-//    int                 ttl;        // --ttl
 }               t_opt ;
 
 
@@ -89,9 +89,9 @@ bool init_socket(t_conf *conf);
 /*          fill_packet.c           */
 void    fill_packet(char *packet, t_conf *conf);
 
-/*          compute_checksum.c      */
-short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
-
+short   compute_checksum(void *packet, int len);
+            // compute_checksum.c
+            
 /*          send_ping.c             */
 void send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
 
@@ -118,8 +118,8 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 /*          init_structs.c          */
 void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
 
-/*          fork if timeout  option.c    */
-void    fork_if_timeout(t_opt *opt, t_conf *conf);
+/*          create thread if timeout  .c    */
+void    create_thread_if_timeout(t_opt *opt, t_conf *conf);
 
 /*          print and update packet stats    */
 void print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);

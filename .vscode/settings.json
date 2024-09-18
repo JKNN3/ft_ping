@@ -16,6 +16,19 @@
         "macros.h": "c",
         "string": "c",
         "string_view": "c",
-        "if.h": "c"
+        "if.h": "c",
+        "ioctl.h": "c",
+        "curses.h": "c",
+        "errors.h": "c",
+        "stdlib.h": "c",
+        "netdb.h": "c",
+        "errno.h": "c",
+        "time.h": "c",
+        "ip_icmp.h": "c",
+        "inet.h": "c",
+        "stdio.h": "c",
+        "stdbool.h": "c",
+        "in.h": "c",
+        "print_macros.h": "c"
     }
 }

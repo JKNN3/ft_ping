@@ -6,7 +6,7 @@
     - le hexdump de verbose
 
         options:
-    - audible
+    - audible       OK
     - count         trouver comment faire sans checker a chaque tour de boucle
     - flood         OK reste a savoir si il faut laisser le root check ou pas
     - help          OK
@@ -32,7 +32,7 @@ k: ping -print  1.1.1.1
   ~ maybe find a way to make valgrind work URGH
 
 */
-# include <math.h>
+// # include <math.h>
 
 static bool check_count_option(t_conf *conf);
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv){
         return 0;
 
     print_header(&opt, &conf, &stats);
-    fork_if_timeout(&opt, &conf);
+    create_thread_if_timeout(&opt, &conf);
 
     while(TRUE){
 

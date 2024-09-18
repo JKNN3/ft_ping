@@ -14,7 +14,6 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
     for(int i = 1 ; argv[i]; i++){
 
         int ret = regex_check_option(argv[i]);
-        // printf("ret regex_check_optionis : %d for %s\n", ret, argv[i]);
         switch (ret)
         {
         case BOOLEAN:
@@ -42,7 +41,7 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
     return TRUE;
 }
 
-/*      check the arg format : boolean option, option and value, option=value   */
+/*      check the arg format : boolean option, option and value, option=value, -optoptopt   */
 static int regex_check_option(char* arg){
 
     if (regex_check_format(arg, REGEX_CHECK_ARG_TYPE_BOOLEAN_OPTION))
@@ -60,7 +59,7 @@ static int regex_check_option(char* arg){
     return (ERROR);
 }
 
-/*      check and set bool true for '-a' '--flood' options   */
+/*      check and set bool true for '-a' '--flood' options              */
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
     // if (regex_check_option())
 
@@ -75,7 +74,7 @@ static bool regex_get_and_set_boolean_value(bool *opt, char *option){
     return FALSE;
 }
 
-/*      check and get args from '-c 12' '--count 3' options   */
+/*      check and get args from '-c 12' '--count 3' options             */
 static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char *value){
 
     int index_opt;
@@ -85,13 +84,12 @@ static bool regex_get_and_set_value(t_opt *opt, t_conf *conf, char *option, char
         if (regex_check_format(option, regex_tab_option_without_value[index_opt]))
             break;
     }
-    // printf("regex is %s for value %s\n", regex_tab_option_without_value[index_opt], value);
     set_value(opt, conf, index_opt, value);
 
     return TRUE;
 }
 
-/*      check and get args from '--ttl=8978' options   */
+/*      check and get args from '--ttl=8978' options                    */
 static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *option_value){
 
     regex_t reg;
@@ -128,8 +126,7 @@ static bool regex_get_and_set_opt_and_value(t_opt *opt, t_conf *conf, char *opti
     return TRUE;
 }
 
-/*      utils       */
-
+/*          sets the option value in the conf struct                    */
 static void set_value(t_opt *opt, t_conf *conf, int index_opt, char*value){
 
     const char *regex_tab_option_value[] = REGEX_LIST_VALUE;
@@ -178,7 +175,7 @@ static bool regex_check_format(const char *testedStr, const char *regex)
         return TRUE;
     return FALSE;
 }
-
+/*      timeout option value must fit in an int                         */
 static void check_timeout_value(unsigned long int value, t_opt *opt){
     if (value > 2147483647)
         puterr_and_exit(ERROR_TIMEOUT_VALUE_TOO_BIG(value), 1);
@@ -187,6 +184,7 @@ static void check_timeout_value(unsigned long int value, t_opt *opt){
     opt->timeout = true;
 }
 
+/*      manage stuck together options like -qfc                        */
 static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *index){
 
     for(int i = 1; argv[*index][i]; i++){
