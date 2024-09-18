@@ -40,6 +40,7 @@ typedef struct  s_conf  {
     char                    *dest_name_or_ip;
     unsigned long long int  nb_packets_to_send;
     int                     ttl;
+    char                    packet_sent[PACKET_LEN];
 }               t_conf ; 
 
 typedef struct option{
@@ -80,7 +81,7 @@ void    resolve_dest_address(char *addr, t_conf *conf);
 
 
 /*          print_packet.c          */
-void    print_packet_dump(char *packet);
+void    print_packet_sent_dump(char *packet_sent, char *src_ip);
 
 /*          socket.c                */
 bool init_socket(t_conf *conf);
@@ -92,7 +93,7 @@ void    fill_packet(char *packet, t_conf *conf);
 short   compute_checksum(void *packet, int len); // len = longueur du packet en octets/bytes
 
 /*          send_ping.c             */
-void send_ping(t_conf *conf, t_stats *stats);
+void send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
 
 /*          recv_pong.c             */
 bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);

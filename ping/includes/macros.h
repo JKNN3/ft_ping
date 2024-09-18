@@ -26,4 +26,7 @@
 # define ERROR_UNKNOWN_HOST fprintf(stderr, "ft_ping : unknown host\n")
 # define ERROR_COMPILING_REGEX fprintf(stderr, "An error occured compiling regex.\n")
 # define ERROR_NEED_TO_BE_ROOT fprintf(stderr, "You need to be root\n")
+# define ERROR_MISSING_HOST_OPERAND fprintf(stderr, "ping: missing host operand\nTry 'ping --help' or 'ping --usage' for more information.\n")
+
+
 #endif

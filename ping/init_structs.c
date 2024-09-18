@@ -22,6 +22,7 @@ static void init_conf_struct(t_conf *conf){
     conf->seq = 0;
     conf->ttl = 64;
     conf->dest_name_or_ip = NULL;
+    memset(conf->packet_sent, 0, PACKET_LEN);
 }
 
 static void init_stats_struct(t_stats *stats){

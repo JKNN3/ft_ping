@@ -2,12 +2,15 @@
 
 static bool check_if_print_usage_or_help(t_opt *opt);
 static bool check_if_user_is_root(t_conf *conf);
+static void check_if_missing_dest_ip(t_conf *conf);
 
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt){
 
     init_structs_and_singletons(conf, opt, stats);
     if (!regex_parse_input(argv, opt, conf))
-        return FALSE; // return usage
+        return FALSE;
+
+    check_if_missing_dest_ip(conf);
 
     if (check_if_print_usage_or_help(opt))
         return FALSE;
@@ -59,6 +62,11 @@ static bool check_if_user_is_root(t_conf *conf){
         conf->interval_time = 0;
         return TRUE;
     }
-    puterr_and_exit(ERROR_NEED_TO_BE_ROOT, 0); // essayer de voir plus tard siy'a un truc avec jsp temporaire pcq jsp
+    puterr_and_exit(ERROR_NEED_TO_BE_ROOT, 0); // essayer de voir plus tard si y'a un truc avec jsp temporaire pcq jsp
     return FALSE;
+} 
+
+static void check_if_missing_dest_ip(t_conf *conf){
+    if (conf->dest_name_or_ip == NULL)
+        puterr_and_exit(ERROR_MISSING_HOST_OPERAND, 64);
 }

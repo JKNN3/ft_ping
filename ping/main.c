@@ -2,7 +2,7 @@
 
 /*
           TO DO
-
+    - 
     - le hexdump de verbose
 
         options:
@@ -39,6 +39,7 @@ static bool check_count_option(t_conf *conf);
 
 int main(int argc, char **argv){
 
+    (void) argc;
     t_conf  conf;
     t_stats stats;
     t_opt   opt;
@@ -55,7 +56,7 @@ int main(int argc, char **argv){
                 break;
 
         intercept_and_handle_signals();
-        send_ping(&conf, &stats);
+        send_ping(&conf, &stats, &opt);
         recv_pong(&conf, &stats, &opt);
 
         sleep(conf.interval_time);

@@ -13,6 +13,9 @@
         "cmath": "c",
         "*.tcc": "c",
         "optional": "c",
-        "macros.h": "c"
+        "macros.h": "c",
+        "string": "c",
+        "string_view": "c",
+        "if.h": "c"
     }
 }

@@ -1,6 +1,6 @@
 #include "includes/ping.h"
 
-void send_ping(t_conf *conf, t_stats *stats){
+void send_ping(t_conf *conf, t_stats *stats, t_opt *opt){
 
     char packet[PACKET_LEN];
 
@@ -9,6 +9,10 @@ void send_ping(t_conf *conf, t_stats *stats){
     gettimeofday(&conf->start_timestamp,NULL);
 
     fill_packet(packet, conf);
+
+    if (opt->verbose)
+        memcpy(conf->packet_sent, packet, PACKET_LEN);
+    
     if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest, sizeof(struct sockaddr))< 0){
         exit(1);
     }

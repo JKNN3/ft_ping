@@ -1,6 +1,6 @@
 NAME	= ft_ping
 
-FLAGS	= -Wextra -Wall -Werror
+FLAGS	= -Wextra -Wall -Werror -g
 
 SRC		= 	ping/main.c						\
 			ping/handle_signals.c			\
@@ -21,10 +21,10 @@ SRC		= 	ping/main.c						\
 OBJ 	=	${SRC:.c=.o}
 
 %.o: %.c
-	clang ${FLAG} -c $< -o ${<:.c=.o}
+	clang ${FLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME): $(OBJ)
-	clang ${OBJ} -o $(NAME) -lm
+	clang  ${OBJ} ${FLAGS} -o $(NAME) -lm
 	sudo setcap cap_net_raw=eip ./ft_ping
 	${MAKE}	clean
 	# clear

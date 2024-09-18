@@ -33,3 +33,6 @@ Step 2: Calculate variance. Variance is calculated by taking each response time 
 Step 3: Calculate standard deviation. This last step is fairly straightforward. Simply take the total of all the squared values from the previous step and find the square root of that value. That will be your standard deviation.
 
 link : https://www.dotcom-monitor.com/wiki/knowledge-base/standard-deviation/
+
+
+The inet_ntoa() function converts the Internet host address in, given in network byte order, to a string in IPv4 dotted-decimal notation. The string is returned in a statically allocated buffer, which subsequent calls will overwrite. WHICH SUBSEQUENT CALLS WILL OVERWRITE.

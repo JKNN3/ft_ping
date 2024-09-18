@@ -8,6 +8,7 @@ bool puterr(char *error){
 }
 
 void puterr_and_exit(int err, int exit_code){
+    (void)err;
     close(get_sockfd(1, 0));
     exit(exit_code);
 }

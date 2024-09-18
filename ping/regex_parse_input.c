@@ -26,7 +26,8 @@ bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
         case OPTION_WITHOUT_VALUE:
             if (!argv[i + 1])
                 puterr_and_exit(ERROR_OPTION_REQUIRE_ARG(argv[i]), 64);
-            regex_get_and_set_value(opt, conf, argv[i], argv[++i]);
+            regex_get_and_set_value(opt, conf, argv[i], argv[i + 1]);
+            i++;
             break;
         case OPTION_QUEUE:
             manage_options_queue(opt, conf, argv, &i);
