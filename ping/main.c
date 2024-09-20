@@ -49,7 +49,6 @@ int main(int argc, char **argv){
 
     print_header(&opt, &conf, &stats);
     create_thread_if_timeout(&opt, &conf);
-
     while(TRUE){
 
         if (opt.count && !check_count_option(&conf))
@@ -65,7 +64,7 @@ int main(int argc, char **argv){
 }
 
 static bool check_count_option(t_conf *conf){
-    if (conf->nb_packets_to_send != 0 && conf->nb_packets_to_send == conf->seq)
+    if (conf->nb_packets_to_send != 0 && conf->nb_packets_to_send == (unsigned long long)conf->seq)
         return FALSE;
     return TRUE;
 }

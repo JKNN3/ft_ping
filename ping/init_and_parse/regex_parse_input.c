@@ -1,4 +1,4 @@
-# include "includes/ping.h"
+# include "../includes/ping.h"
 
 static int  regex_check_option(char* arg);
 static bool regex_get_and_set_boolean_value(bool *opt, char *option);
@@ -8,6 +8,8 @@ static bool regex_check_format(const char *testedStr, const char *regex);
 static void set_value(t_opt *opt, t_conf *conf, int index_opt,  char*value);
 static void check_timeout_value(unsigned long int value, t_opt *opt);
 static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *index);
+static void resolve_dest_address(char *addr, t_conf *conf);
+static void set_dest_name_and_addr(t_conf *conf, char *addr, struct addrinfo *res);
 
 bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf)
 {
@@ -143,6 +145,7 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt, char*value){
                 ERROR_INVALID_VALUE(value); return;
             }
             conf->interval_time = strtold(value, NULL);
+            opt->interval = TRUE;
             break;
         case TIMEOUT:
             if (!regex_check_format(value, regex_tab_option_value[TIMEOUT])){
@@ -200,4 +203,36 @@ static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *ind
             return;
         }
     }
+}
+
+static void resolve_dest_address(char *addr, t_conf *conf){
+    if (conf->adress_resolved) return;
+
+    struct addrinfo hints;
+    struct addrinfo *res = NULL;
+
+    memset(&conf->dest_addr, 0, sizeof(struct sockaddr_in));
+    memset(&hints, 0, sizeof(struct addrinfo));
+    hints.ai_family = AF_INET;
+    hints.ai_flags = AI_CANONNAME;
+
+    conf->dest_addr.sin_family = AF_INET;
+    if (getaddrinfo(addr, NULL, &hints, &res)){
+        freeaddrinfo(res);
+        puterr_and_exit(ERROR_UNKNOWN_HOST, 1);
+    }
+    set_dest_name_and_addr(conf, addr, res);
+    freeaddrinfo(res);
+}
+
+static void set_dest_name_and_addr(t_conf *conf, char *addr, struct addrinfo *res){
+    t_stats *stats = get_stats(true, NULL);
+
+    conf->adress_resolved = TRUE;
+    conf->dest_addr = *((struct sockaddr_in*)res->ai_addr);
+    if (res->ai_canonname == NULL){
+        stats->dest_name = strdup(addr);
+        return;
+    }
+    stats->dest_name = strdup(res->ai_canonname);
 }

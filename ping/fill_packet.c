@@ -27,7 +27,7 @@ static void    fill_ip_header(struct ip *packet, t_conf *conf){
     packet->ip_p = IPPROTO_ICMP;
     packet->ip_sum = 0;
     packet->ip_src.s_addr = INADDR_ANY;
-    packet->ip_dst.s_addr = conf->dest.sin_addr.s_addr;
+    packet->ip_dst.s_addr = conf->dest_addr.sin_addr.s_addr;
     packet->ip_sum = compute_checksum((void*)packet, IP_HEADER_LEN);
 }
 
@@ -38,7 +38,7 @@ static void    fill_icmp_msg(struct icmp *packet, t_conf *conf){
     packet->icmp_code = ICMP_ECHOREPLY;
     packet->icmp_cksum = 0;
     packet->icmp_id = htons(conf->id & 0xFFFF);
-    packet->icmp_seq= htons(++(conf->seq));
+    packet->icmp_seq= htons((conf->seq)++);
 
      void *icmp_timeval = (void*)packet + ICMP_HEADER_LEN;
      if (gettimeofday((struct timeval *)icmp_timeval, NULL) < 0)

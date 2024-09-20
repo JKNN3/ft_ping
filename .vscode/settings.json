@@ -29,6 +29,7 @@
         "stdio.h": "c",
         "stdbool.h": "c",
         "in.h": "c",
-        "print_macros.h": "c"
+        "print_macros.h": "c",
+        "pthread.h": "c"
     }
 }

@@ -31,7 +31,7 @@ static void     print_final_stats(t_stats *stats){
     if (stats->nb_packets_received > 0)
     {
         PRINT_FINAL_STATS(\
-            stats->dest_ip,                                                               \
+            stats->dest_name,                                                               \
             stats->nb_packets_transmitted,                                                \
             stats->nb_packets_received,                                                   \
             (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \
@@ -43,7 +43,7 @@ static void     print_final_stats(t_stats *stats){
         return;
     }
     PRINT_FINAL_STATS_NO_RECV(\
-        stats->dest_ip,                                                               \
+        stats->dest_name,                                                               \
         stats->nb_packets_transmitted,                                                \
         stats->nb_packets_received,                                                   \
         (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \

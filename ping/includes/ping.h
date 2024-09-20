@@ -40,9 +40,9 @@ typedef struct  s_conf  {
     long double             interval_time;      //in seconds
     unsigned long int       timeout;
     unsigned long int       seq;
-    struct sockaddr_in      dest;
+    struct sockaddr_in      dest_addr;
     struct timeval          start_timestamp;
-    char                    *dest_name_or_ip;
+    bool                    adress_resolved;
     unsigned long long int  nb_packets_to_send;
     int                     ttl;
     char                    packet_sent[PACKET_LEN];
@@ -58,11 +58,13 @@ typedef struct option{
     bool                help;
     bool                timeout;
     bool                count;
+    bool                interval;
 }               t_opt ;
 
 
 typedef struct  s_stats{
-    char*                   dest_ip;
+    char                    *dest_ip;
+    char                    *dest_name;
     unsigned int            nb_packets_transmitted;
     unsigned int            nb_packets_received;
     double                  loss_percentage;
@@ -77,7 +79,6 @@ typedef struct  s_stats{
 
 /*          parse_argv_get_conf.c   */
 bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
-void    resolve_dest_address(char *addr, t_conf *conf);
 
 
 /*          print_packet.c          */

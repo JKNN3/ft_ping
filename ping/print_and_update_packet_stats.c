@@ -8,12 +8,16 @@ void print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt
     int             ttl = 0;
     double          time_elapsed = 0.0;
 
-    seq = ((struct icmp *)(&packet[IP_HEADER_LEN]))->icmp_seq;
-    ttl = ((struct ip *)(packet))->ip_ttl;
     time_elapsed = compute_elapsed_time((void*)&(packet[IP_HEADER_LEN + ICMP_HEADER_LEN]));
+    update_stats(stats, time_elapsed);
+    if (opt->flood){
+        write(1,"\b",1);
+        return;
+    }
+    seq = ntohs(((struct icmp *)(&packet[IP_HEADER_LEN]))->icmp_seq);
+    ttl = ((struct ip *)(packet))->ip_ttl;
     if (!opt->quiet && !opt->flood)
         PRINT_PACKET_STATS(ret - IP_HEADER_LEN, stats->dest_ip, seq, ttl, time_elapsed);
-    update_stats(stats, time_elapsed);
 };
 
 static double   compute_elapsed_time(struct timeval *start){
