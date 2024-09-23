@@ -2,13 +2,10 @@
 # define REGEX_MACROS_H
 
 
-// ip regex
-// uns string pour check si c'est une option booléen
-
 # define REGEX_CHECK_ARG_QUEUE "^-[adf\?qvciw]{2,}$"
 # define REGEX_CHECK_ARG_TYPE_BOOLEAN_OPTION "^(-[adf\?qv]{1}$)|(--(debug)|(flood)|(help)|(quiet)|(usage)|(verbose)$)$"
 # define REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE "^--(count|interval|timeout|ttl$)=([ -~]*)$"
-# define REGEX_CHECK_ARG_TYPE_OPTION "^(--(count|inetrval|timeout|ttl)$)|(-[ciw]{1}$)$"
+# define REGEX_CHECK_ARG_TYPE_OPTION "^(--(count|interval|timeout|ttl)$)|(-[ciw]{1}$)$"
 # define REGEX_CHECK_ARG_DEST "^[^-][ -~]*$"
 # define REGEX_CHECK_OPTION "^-[ -~]*$"
 
@@ -38,12 +35,6 @@
     "^[+-]{0,1}([0-9]{1,20})$",\
     "^[+-]{0,1}([0-9]+)$",\
 };
-
-// u long int
-  // double
-   // u long int
-  // int mais short, juste regarder si il est pas trop long genre pas plus de 4 chiffres pour pas que atoi overflow
-
 
 # define REGEX_LIST_FULLNAME_OPTION {\
     "^(--count)=([ -~]*)$",\

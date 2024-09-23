@@ -36,7 +36,6 @@
 typedef struct  s_conf  {
     int                     sockfd;
     pid_t                   id;
-    int                     exit_status;
     long double             interval_time;      //in seconds
     unsigned long int       timeout;
     unsigned long int       seq;
@@ -70,7 +69,6 @@ typedef struct  s_stats{
     double                  loss_percentage;
     long double             total_time_ms;
     unsigned int            nb_error;
-//      rtt = round_trip delay
     float                   rtt_min;
     float                   rtt_max;
     long double             rtt_sq_total;
@@ -78,51 +76,57 @@ typedef struct  s_stats{
 
 
 /*          parse_argv_get_conf.c   */
-bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
+bool        parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
 
 
 /*          print_packet.c          */
-void    print_packet_sent_dump(char *packet_sent, char *src_ip);
+void        print_packet_sent_dump(char *packet_sent, char *src_ip);
 
 /*          socket.c                */
-bool init_socket(t_conf *conf);
+bool        init_socket(t_opt *opt, t_conf *conf);
 
 /*          fill_packet.c           */
-void    fill_packet(char *packet, t_conf *conf);
+void        fill_packet(char *packet, t_conf *conf);
 
-short   compute_checksum(void *packet, int len);
-            // compute_checksum.c
+/*          compute_checksum.c          */
+short       compute_checksum(void *packet, int len);
             
 /*          send_ping.c             */
-void send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
+void        send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
 
 /*          recv_pong.c             */
-bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
+bool        recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
 
 /*          print_final_stats_and_exit.c  */
-void    print_final_stats_and_exit(t_stats *stats, int exit_status);
-void    print_core_dump_and_exit();
-void    print_sigquit_stats(t_stats *stats);
+void        print_final_stats_and_exit(t_stats *stats, int exit_status);
+void        print_core_dump_and_exit();
+void        print_sigquit_stats(t_stats *stats);
 
 /*          handle_signals.c        */
-void    intercept_and_handle_signals();
+void        intercept_and_handle_signals();
 
 /*          utils.c                 */
-t_stats *get_stats(bool get, t_stats *stats_struct);
-int     get_sockfd(bool get, int fd);
-bool    puterr(char *error);
-void    puterr_and_exit(int err, int exit_code);
-void    print_header(t_opt *opt, t_conf *conf, t_stats *stats);
+t_stats *   get_stats(bool request, t_stats *stats_struct);
+int         get_sockfd(bool request, int fd);
 
-bool regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
+bool        puterr(char *error);
+void        puterr_and_exit(int err, int exit_code);
+void        print_header(t_opt *opt, t_conf *conf, t_stats *stats);
+bool        check_count_option(t_conf *conf);
+
+/*          regex_parse_input*/
+bool        regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 
 /*          init_structs.c          */
-void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
+void        init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
 
 /*          create thread if timeout  .c    */
-void    create_thread_if_timeout(t_opt *opt, t_conf *conf);
+void        create_thread_if_timeout(t_opt *opt, t_conf *conf);
+pthread_t * get_thread();
+bool        get_timeout_status(bool request);
 
 /*          print and update packet stats    */
-void print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
+void        print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
+
 
 #endif

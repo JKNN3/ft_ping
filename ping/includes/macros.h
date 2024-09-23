@@ -16,6 +16,9 @@
 # define MAX(x, y)      x > y ? x : y
 # define MIN(x, y)      x < y ? x : y
 
+# define GET 1
+# define SET 0
+
 # define MAKE_SOUND printf("\a")
 
 # define PACKET_DUMP_IP_HEADER "IP Hdr Dump:\n"

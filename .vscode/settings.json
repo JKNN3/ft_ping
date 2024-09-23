@@ -30,6 +30,8 @@
         "stdbool.h": "c",
         "in.h": "c",
         "print_macros.h": "c",
-        "pthread.h": "c"
+        "pthread.h": "c",
+        "memory": "c",
+        "istream": "c"
     }
 }
