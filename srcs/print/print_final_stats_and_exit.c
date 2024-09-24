@@ -32,6 +32,7 @@ void print_sigquit_stats(t_stats *stats){
 }
 
 static void     print_final_stats(t_stats *stats){
+
     if (stats->nb_packets_received > 0)
     {
         PRINT_FINAL_STATS(\

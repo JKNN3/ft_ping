@@ -12,6 +12,7 @@ int main(int argc, char **argv){
 
     print_header(&opt, &conf, &stats);
     create_thread_if_timeout(&opt, &conf);
+
     while(TRUE){
 
         if (opt.count && !check_count_option(&conf))

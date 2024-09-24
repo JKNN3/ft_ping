@@ -21,6 +21,7 @@ bool    parse_input_check_conf(char **argv, t_conf *conf, t_stats *stats, t_opt 
 }
 
 static bool check_if_print_usage_or_help(t_opt *opt){
+
     if (opt->usage){
         PRINT_USAGE;
         return TRUE;
@@ -33,11 +34,13 @@ static bool check_if_print_usage_or_help(t_opt *opt){
 } 
 
 static void check_if_missing_dest_ip(t_conf *conf){
+
     if (!conf->adress_resolved)
         puterr_and_exit(ERROR_MISSING_HOST_OPERAND, 64);
 }
 
 static void check_flood_and_interval(t_conf *conf, t_opt *opt){
+
     if (opt->flood && opt->interval)
         puterr_and_exit(ERROR_INTERVAL_AND_FLOOD_INCOMPATIBLE, 1);
     if (opt->flood)

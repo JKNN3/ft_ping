@@ -51,3 +51,4 @@ static void init_opt_struct(t_opt *opt){
     opt->interval = false;
     opt->timeout = false;
 }
+

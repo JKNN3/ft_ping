@@ -167,8 +167,8 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt, char*value){
 }
 
 /*      return true if the arg match with the regex, false otherwise    */
-static bool regex_check_format(const char *testedStr, const char *regex)
-{
+static bool regex_check_format(const char *testedStr, const char *regex){
+
     regex_t reg;
 
     if (regcomp(&reg, regex, REG_EXTENDED | REG_NOSUB) != 0)
@@ -182,6 +182,7 @@ static bool regex_check_format(const char *testedStr, const char *regex)
 
 /*      timeout option value must fit in an int                         */
 static void check_timeout_value(unsigned long int value, t_opt *opt){
+
     if (value > 2147483647)
         puterr_and_exit(ERROR_TIMEOUT_VALUE_TOO_BIG(value), 1);
     if (value == 0)
@@ -208,6 +209,7 @@ static void manage_options_queue(t_opt *opt, t_conf *conf, char **argv, int *ind
 }
 
 static void resolve_dest_address(char *addr, t_conf *conf){
+
     if (conf->adress_resolved) return;
 
     struct addrinfo hints;
@@ -228,6 +230,7 @@ static void resolve_dest_address(char *addr, t_conf *conf){
 }
 
 static void set_dest_name_and_addr(t_conf *conf, char *addr, struct addrinfo *res){
+
     t_stats *stats = get_stats(true, NULL);
 
     conf->adress_resolved = TRUE;
