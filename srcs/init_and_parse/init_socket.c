@@ -33,7 +33,6 @@ bool init_socket(t_opt *opt, t_conf *conf){
             return FALSE;
         }
     }
-
     get_sockfd(false, conf->sockfd);
     return TRUE;
 }
