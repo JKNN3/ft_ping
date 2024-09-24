@@ -1,13 +1,12 @@
 #include "../../includes/ping.h"
 
 static bool check_if_print_usage_or_help(t_opt *opt);
-// static bool check_if_user_is_root(t_conf *conf);
 static void check_if_missing_dest_ip(t_conf *conf);
 static void check_flood_and_interval(t_conf *conf, t_opt *opt);
 
-bool    parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt){
+bool    parse_input_check_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt){
 
-    init_structs_and_singletons(conf, opt, stats);
+    init_structs(conf, opt, stats);
     if (!regex_parse_input(argv, opt, conf))
         return FALSE;
 

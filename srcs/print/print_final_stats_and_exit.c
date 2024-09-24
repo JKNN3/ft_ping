@@ -4,12 +4,13 @@ static void     print_final_stats(t_stats *stats);
 static double   compute_stddev(t_stats *stats);
 
 void    print_final_stats_and_exit(t_stats *stats, int exit_status){
+
     print_final_stats(stats);
     if (stats->dest_name)
         free(stats->dest_name);
     if (get_timeout_status(GET))
         pthread_cancel(*get_thread());
-    // close(get_sockfd(GET, 0));
+    close(get_sockfd(GET, 0));
     exit(exit_status);
 }
 
@@ -24,7 +25,7 @@ void print_sigquit_stats(t_stats *stats){
         (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)     \
                  / stats->nb_packets_transmitted),                                  \
         stats->rtt_min,                                                             \
-        compute_stddev(stats),                                                     \
+        compute_stddev(stats),                                                      \
         2.4,                                                                        \
         stats->rtt_max                                                              \
     );
@@ -34,7 +35,7 @@ static void     print_final_stats(t_stats *stats){
     if (stats->nb_packets_received > 0)
     {
         PRINT_FINAL_STATS(\
-            stats->dest_name,                                                               \
+            stats->dest_name,                                                             \
             stats->nb_packets_transmitted,                                                \
             stats->nb_packets_received,                                                   \
             (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \
@@ -46,7 +47,7 @@ static void     print_final_stats(t_stats *stats){
         return;
     }
     PRINT_FINAL_STATS_NO_RECV(\
-        stats->dest_name,                                                               \
+        stats->dest_name,                                                             \
         stats->nb_packets_transmitted,                                                \
         stats->nb_packets_received,                                                   \
         (int)(((stats->nb_packets_transmitted-stats->nb_packets_received) *100)       \

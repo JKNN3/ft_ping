@@ -37,14 +37,3 @@ t_stats *get_stats(bool request, t_stats *stats_struct){
         return NULL;
     }
 }
-
-int     get_sockfd(bool request, int fd){
-    
-    static int sockfd = 0;
-
-    if (request == GET)
-        return sockfd;
-    sockfd = fd;
-
-    return 0;
-}

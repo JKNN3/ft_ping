@@ -4,14 +4,13 @@ static void init_conf_struct(t_conf *conf);
 static void init_stats_struct(t_stats *stats);
 static void init_opt_struct(t_opt *opt);
 
-void    init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats){
+void    init_structs(t_conf *conf, t_opt *opt, t_stats *stats){
 
     init_conf_struct(conf);
     init_stats_struct(stats);
     init_opt_struct(opt);
 
     get_stats(false, stats);
-    get_sockfd(false, conf->sockfd);
 }
 
 static void init_conf_struct(t_conf *conf){

@@ -27,16 +27,11 @@
 # include <signal.h>                // sigaction, kill()
 # include <pthread.h>               // pthread_t, pthread_create()
 
-# undef TRUE
-# define TRUE    1
-# undef FALSE
-# define FALSE   0
-
 
 typedef struct  s_conf  {
     int                     sockfd;
     pid_t                   id;
-    long double             interval_time;      //in seconds
+    long double             interval_time;
     unsigned long int       timeout;
     unsigned long int       seq;
     struct sockaddr_in      dest_addr;
@@ -75,58 +70,65 @@ typedef struct  s_stats{
 }               t_stats;
 
 
-/*          parse_argv_get_conf.c   */
-bool        parse_input_get_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
+/*** init_and_parse ***/
 
+bool        parse_input_check_conf(char **argv, t_conf *conf, t_stats *stats, t_opt *opt);
+                // parse_input_check_conf.c
 
-/*          print_packet.c          */
-void        print_packet_sent_dump(char *packet_sent, char *src_ip);
+bool        regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
+                // regex_parse_input.c
 
-/*          socket.c                */
+void        init_structs(t_conf *conf, t_opt *opt, t_stats *stats);
+                // init_structs.c
+
 bool        init_socket(t_opt *opt, t_conf *conf);
+int         get_sockfd(bool request, int fd);
+                // init_socket.c
 
-/*          fill_packet.c           */
-void        fill_packet(char *packet, t_conf *conf);
 
-/*          compute_checksum.c          */
-short       compute_checksum(void *packet, int len);
-            
-/*          send_ping.c             */
-void        send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
+/*** print ***/
 
-/*          recv_pong.c             */
-bool        recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
+void        print_packet_sent_dump(char *packet_sent, char *src_ip);
+                // print_packet_sent_dump.c
 
-/*          print_final_stats_and_exit.c  */
 void        print_final_stats_and_exit(t_stats *stats, int exit_status);
 void        print_core_dump_and_exit();
 void        print_sigquit_stats(t_stats *stats);
+                // print_final_stats_and_exit.c
 
-/*          handle_signals.c        */
+void        print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
+                // print_and_update_packet_stats.c
+
+/*** routine ***/
+
+void        fill_packet(char *packet, t_conf *conf);
+                // fill_packet.c
+
+short       compute_checksum(void *packet, int len);
+                // compute_checksum.c
+            
+void        send_ping(t_conf *conf, t_stats *stats, t_opt *opt);
+                // send_ping.c
+
+bool        recv_pong(t_conf *conf, t_stats *stats, t_opt *opt);
+                // recv_pong.c
+
 void        intercept_and_handle_signals();
+                // handle_signals.c
 
-/*          utils.c                 */
-t_stats *   get_stats(bool request, t_stats *stats_struct);
-int         get_sockfd(bool request, int fd);
+void        create_thread_if_timeout(t_opt *opt, t_conf *conf);
+bool        get_timeout_status(bool request);
+pthread_t * get_thread();
+                // create_thread_if_timeout.c
 
 bool        puterr(char *error);
 void        puterr_and_exit(int err, int exit_code);
 void        print_header(t_opt *opt, t_conf *conf, t_stats *stats);
 bool        check_count_option(t_conf *conf);
+t_stats *   get_stats(bool request, t_stats *stats_struct);
+                // utils.c 
 
-/*          regex_parse_input*/
-bool        regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 
-/*          init_structs.c          */
-void        init_structs_and_singletons(t_conf *conf, t_opt *opt, t_stats *stats);
-
-/*          create thread if timeout  .c    */
-void        create_thread_if_timeout(t_opt *opt, t_conf *conf);
-pthread_t * get_thread();
-bool        get_timeout_status(bool request);
-
-/*          print and update packet stats    */
-void        print_and_update_packet_stats( t_stats *stats, char *packet, int ret, t_opt *opt);
 
 
 #endif

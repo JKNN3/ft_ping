@@ -19,6 +19,11 @@
 # define GET 1
 # define SET 0
 
+# undef TRUE
+# define TRUE    1
+# undef FALSE
+# define FALSE   0
+
 # define MAKE_SOUND printf("\a")
 
 # define PACKET_DUMP_IP_HEADER "IP Hdr Dump:\n"

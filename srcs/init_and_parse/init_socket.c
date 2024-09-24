@@ -33,5 +33,18 @@ bool init_socket(t_opt *opt, t_conf *conf){
             return FALSE;
         }
     }
+
+    get_sockfd(false, conf->sockfd);
     return TRUE;
+}
+
+int     get_sockfd(bool request, int fd){
+    
+    static int sockfd = 0;
+
+    if (request == GET)
+        return sockfd;
+    sockfd = fd;
+
+    return 0;
 }

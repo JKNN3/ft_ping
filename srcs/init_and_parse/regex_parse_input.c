@@ -63,7 +63,6 @@ static int regex_check_option(char* arg){
 
 /*      check and set bool true for '-a' '--flood' options              */
 static bool regex_get_and_set_boolean_value(bool *opt, char *option){
-    // if (regex_check_option())
 
     const char *regex_tab_bool_option[] = REGEX_LIST_BOOL_OPTION;
 
@@ -166,6 +165,7 @@ static void set_value(t_opt *opt, t_conf *conf, int index_opt, char*value){
         }
     }
 }
+
 /*      return true if the arg match with the regex, false otherwise    */
 static bool regex_check_format(const char *testedStr, const char *regex)
 {
@@ -179,6 +179,7 @@ static bool regex_check_format(const char *testedStr, const char *regex)
         return TRUE;
     return FALSE;
 }
+
 /*      timeout option value must fit in an int                         */
 static void check_timeout_value(unsigned long int value, t_opt *opt){
     if (value > 2147483647)
