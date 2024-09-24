@@ -2,15 +2,15 @@
 # define REGEX_MACROS_H
 
 
+# define MAXGROUP               2
+# define NB_OF_BOOLEAN_OPTIONS  7
+
 # define REGEX_CHECK_ARG_QUEUE "^-[adf\?qvciw]{2,}$"
 # define REGEX_CHECK_ARG_TYPE_BOOLEAN_OPTION "^(-[adf\?qv]{1}$)|(--(debug)|(flood)|(help)|(quiet)|(usage)|(verbose)$)$"
 # define REGEX_CHECK_ARG_TYPE_OPTION_AND_VALUE "^--(count|interval|timeout|ttl$)=([ -~]*)$"
 # define REGEX_CHECK_ARG_TYPE_OPTION "^(--(count|interval|timeout|ttl)$)|(-[ciw]{1}$)$"
 # define REGEX_CHECK_ARG_DEST "^[^-][ -~]*$"
 # define REGEX_CHECK_OPTION "^-[ -~]*$"
-
-# define MAXGROUP               2
-# define NB_OF_BOOLEAN_OPTIONS  7
 
 # define REGEX_LIST_OPTION {\
     "^(-?c)|(--count)$",\
