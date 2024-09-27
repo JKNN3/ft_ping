@@ -29,7 +29,8 @@
 
 
 typedef struct  s_conf  {
-    int                     sockfd;
+    int                     sockfd_send;
+    int                     sockfd_recv;
     pid_t                   id;
     long double             interval_time;
     unsigned long int       timeout;
