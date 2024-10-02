@@ -10,7 +10,9 @@ void    print_final_stats_and_exit(t_stats *stats, int exit_status){
         free(stats->dest_name);
     if (get_timeout_status(GET))
         pthread_cancel(*get_thread());
-    close(get_sockfd(GET, 0));
+    int *fds = get_sockfds(GET, 0, 0);
+    close(fds[0]);
+    close(fds[1]);
     exit(exit_status);
 }
 

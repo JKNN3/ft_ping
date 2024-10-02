@@ -6,7 +6,7 @@ SRC		= 	srcs/main.c										\
 			srcs/init_and_parse/init_structs.c				\
 			srcs/init_and_parse/parse_input_check_conf.c	\
 			srcs/init_and_parse/regex_parse_input.c			\
-			srcs/init_and_parse/init_socket.c				\
+			srcs/init_and_parse/init_sockets.c				\
 			srcs/routine/fill_packet.c						\
 			srcs/routine/handle_signals.c					\
 			srcs/routine/compute_checksum.c					\

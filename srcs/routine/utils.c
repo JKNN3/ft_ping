@@ -9,7 +9,9 @@ bool puterr(char *error){
 void puterr_and_exit(int err, int exit_code){
 
     (void)err;
-    close(get_sockfd(1, 0));
+    int *fds = get_sockfds(GET, 0, 0);
+    close(fds[0]);
+    close(fds[1]);
     exit(exit_code);
 }
 

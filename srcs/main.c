@@ -7,7 +7,7 @@ int main(int argc, char **argv){
     t_stats stats;
     t_opt   opt;
 
-    if (!parse_input_check_conf(argv, &conf, &stats, &opt) || !init_socket(&opt, &conf))
+    if (!parse_input_check_conf(argv, &conf, &stats, &opt) || !init_sockets(&opt, &conf))
         return 0;
 
     print_header(&opt, &conf, &stats);

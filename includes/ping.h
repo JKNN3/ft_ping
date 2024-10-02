@@ -83,9 +83,9 @@ bool        regex_parse_input(char ** argv, t_opt *opt, t_conf *conf);
 void        init_structs(t_conf *conf, t_opt *opt, t_stats *stats);
                 // init_structs.c
 
-bool        init_socket(t_opt *opt, t_conf *conf);
-int         get_sockfd(bool request, int fd);
-                // init_socket.c
+bool        init_sockets(t_opt *opt, t_conf *conf);
+int         *get_sockfds(bool request, int send_fd, int recv_fd);
+                // init_sockets.c
 
 
 /*** print ***/
