@@ -34,7 +34,7 @@ bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
 
             int bytes_recv = receive_packet(conf, packet_recv);
             if (bytes_recv < 0){
-                ERROR_TIMEOUT(stats->dest_ip, ntohs(((struct icmp*)&packet_recv[IP_HEADER_LEN])->icmp_seq));
+                // ERROR_TIMEOUT(stats->dest_ip, ntohs(((struct icmp*)&packet_recv[IP_HEADER_LEN])->icmp_seq));
                 return FALSE;
             }
             if (check_packet_received(packet_recv, bytes_recv, opt, conf))
@@ -48,7 +48,7 @@ static int receive_packet(t_conf *conf, char *packet_recv){
 
     memset(packet_recv, 0, PACKET_LEN);
 
-    int bytes_recv = recv(conf->sockfd, packet_recv, PACKET_LEN, 0);
+    int bytes_recv = recv(conf->sockfd_recv, packet_recv, PACKET_LEN, 0);
 
     return (bytes_recv);
 }

@@ -14,7 +14,7 @@ void send_ping(t_conf *conf, t_stats *stats, t_opt *opt){
     fill_packet(packet, conf);
     if_verbose_copy_packet_for_print(opt->verbose, conf, packet);
     
-    if (sendto(conf->sockfd, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest_addr, sizeof(struct sockaddr))< 0){
+    if (sendto(conf->sockfd_send, &packet, PACKET_LEN, 0, (const struct sockaddr*)&conf->dest_addr, sizeof(struct sockaddr))< 0){
         exit(1);
     }
     stats->nb_packets_transmitted++;
