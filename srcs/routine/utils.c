@@ -8,7 +8,12 @@ bool puterr(char *error){
 
 void puterr_and_exit(int err, int exit_code){
 
+    t_stats *stats = get_stats(GET, NULL);
     (void)err;
+    if (stats->dest_name)
+        free(stats->dest_name);
+    if (get_timeout_status(GET))
+        pthread_cancel(*get_thread());
     int *fds = get_sockfds(GET, 0, 0);
     close(fds[0]);
     close(fds[1]);

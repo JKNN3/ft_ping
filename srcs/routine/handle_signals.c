@@ -10,7 +10,7 @@ static void handle_signals(int sig){
             print_sigquit_stats(stats);
             return;
         }
-        puterr_and_exit(ERROR_CORE_DUMP, 131);
+        puterr_and_exit(ERROR_QUIT, 131);
         return;
     }
     print_final_stats_and_exit(stats, 0);

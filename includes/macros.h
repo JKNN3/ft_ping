@@ -9,7 +9,7 @@
 # define ICMP_MSG_LEN                                   64          // bytes
 # define PACKET_LEN                                     84          // bytes
 # define ICMP_PAYLOAD_DATA_LEN                          40          // bytes
-# define SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE   (1 << 14)   //set the 'dont fragment the packet' bit (bit 01) to true
+# define SET_THE_DONT_FRAGMENT_THE_PACKET_BIT_TO_TRUE   (1 << 14)   // set the 'dont fragment the packet' bit (bit 01) to true
 # define ICMP_TIMESTAMP_LEN                             16          // bytes
 # define ICMP_PAYLOAD_STARTING_BYTE                     44
 # define DATA_BYTES                                     56
@@ -29,4 +29,9 @@
 # define PACKET_DUMP_IP_HEADER "IP Hdr Dump:\n"
 # define PACKET_DUMP_IP_DETAILS "Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src	Dst	Data\n"
 
+# define BLUE "\e[38;2;102;178;255m"
+# define PURPLE "\e[38;2;153;153;255m"
+# define PINK "\e[38;2;255;153;204m"
+# define YELLOW "\e[38;2;255;205;0m"
+# define WHITE "\033[0;37m"  
 #endif
