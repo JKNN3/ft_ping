@@ -19,6 +19,12 @@
 # define GET 1
 # define SET 0
 
+# ifdef VERBOSE
+#  define LOG(x)    printf("%s %d\n", #x, x)
+#  else
+#  define LOG(x)
+# endif
+
 # undef TRUE
 # define TRUE    1
 # undef FALSE

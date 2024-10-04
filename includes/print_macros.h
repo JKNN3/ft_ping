@@ -24,9 +24,9 @@ printf("%d bytes from %s%s%s: %s\n", bytes_recv, PURPLE, ip, WHITE, err);
                                 rtt_min, rtt_avg, rtt_max, rtt_stddev)        \
 printf("--- %s ping statistics ---\n\
 %d packets transmitted, %d packets received, %d%% packet loss\n\
-round-trip %smin%s/%savg%s/%smax%s/%sstddev%s = %s%.3f%s/%s%.3Lf%s/%s%.3f%s/%s%.3f%s ms\n",\
-ip, nb_packets_sent, nb_packets_recv, loss_percentage, BLUE, WHITE, PURPLE, WHITE, PINK, WHITE, \
-YELLOW, WHITE, BLUE, rtt_min, WHITE, PURPLE, rtt_avg, WHITE, PINK, rtt_max, WHITE, YELLOW, rtt_stddev, WHITE);
+round-trip "BLUE"min"WHITE"/"PURPLE"avg"WHITE"/"PINK"max"WHITE"/"YELLOW"stddev"WHITE" = \
+"BLUE"%.3f"WHITE"/"PURPLE"%.3Lf"WHITE"/"PINK"%.3f"WHITE"/"YELLOW"%.3f"WHITE" ms\n",\
+ip, nb_packets_sent, nb_packets_recv, loss_percentage, rtt_min, rtt_avg, rtt_max, rtt_stddev);
 
 #define PRINT_FINAL_STATS_NO_RECV(ip, nb_packets_sent, nb_packets_recv, loss_percentage)\
 printf("--- %s ping statistics ---\n\
@@ -36,9 +36,9 @@ ip, nb_packets_sent, nb_packets_recv, loss_percentage);
 /**     print SIGQUIT stats     **/
 
 # define PRINT_SIGQUIT_STATS(nb_recv, nb_sent, loss, min, avg, stddev, max)            \
-printf("%d/%d packets, %d%% loss, %smin%s/%savg%s/%sstddev%s/%smax%s = %s%.3f%s/%s%.3f%s/%s%.3f%s/%s%.3f%s ms\n",        \
-        nb_recv, nb_sent, loss, BLUE, WHITE, PURPLE, WHITE, PINK, WHITE, \
-YELLOW, WHITE, BLUE, min, WHITE, PURPLE, avg, WHITE, PINK, stddev, WHITE, YELLOW, max, WHITE);
+printf("%d/%d packets, %d%% loss, "BLUE"min"WHITE"/"PURPLE"avg"WHITE"/"PINK"stddev"WHITE"/"YELLOW"max"WHITE" = \
+"BLUE"%.3f"WHITE"/"PURPLE"%.3f"WHITE"/"PINK"%.3f"WHITE"/"YELLOW"%.3f"WHITE" ms\n",        \
+        nb_recv, nb_sent, loss, min, avg, stddev, max);
 
 # define PRINT_USAGE \
 printf("Usage: ping [-dcfv?] [-c NUMBER] [-i NUMBER] [-T NUM] [-w N]\n\

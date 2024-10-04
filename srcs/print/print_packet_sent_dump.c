@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static int  fill_buffer_with_ip_hexdump(char *buffer, char *packet);
 static int  fill_buffer_with_ip_header_infos(char *buffer, struct ip *ip, char *src_ip);

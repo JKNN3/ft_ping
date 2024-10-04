@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static bool check_if_print_usage_or_help(t_opt *opt);
 static void check_if_missing_dest_ip(t_conf *conf);

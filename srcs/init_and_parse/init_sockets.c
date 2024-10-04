@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static bool init_sock_send(t_opt *opt, t_conf *conf);
 static bool init_sock_recv(t_conf *conf);

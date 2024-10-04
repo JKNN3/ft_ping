@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static const char	*icmp_errors[] =
 {
@@ -33,6 +33,7 @@ bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
                     MAKE_SOUND;
 
             int bytes_recv = receive_packet(conf, packet_recv);
+            LOG(bytes_recv);
             if (bytes_recv < 0){
                 // ERROR_TIMEOUT(stats->dest_ip, ntohs(((struct icmp*)&packet_recv[IP_HEADER_LEN])->icmp_seq));
                 return FALSE;

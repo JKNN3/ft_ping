@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static void     update_stats(t_stats *stats, double rtt);
 static double   compute_elapsed_time(struct timeval *start);

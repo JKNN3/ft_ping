@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static void if_flood_print_point(t_opt *opt);
 static void if_verbose_copy_packet_for_print(bool verbose, t_conf *conf, char *packet);

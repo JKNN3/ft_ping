@@ -1,6 +1,9 @@
 NAME	= 	ft_ping
 
-FLAGS	= 	-Wextra -Wall -Werror
+SRC_DIR	=	srcs
+OBJ_DIR	=	obj
+INCLUDE_DIR = -I includes
+FLAGS	=	-Wextra -Wall -Werror
 
 SRC		= 	srcs/main.c										\
 			srcs/init_and_parse/init_structs.c				\
@@ -18,29 +21,45 @@ SRC		= 	srcs/main.c										\
 			srcs/print/print_and_update_packet_stats.c		\
 			srcs/print/print_packet_sent_dump.c				\
 
-OBJ 	=	${SRC:.c=.o}
+OBJ 	=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
-%.o: %.c
-	@echo "\e[38;2;255;222;0mcreating object for:\e[38;2;255;255;255m $< "
-	@clang ${FLAGS} -c $< -o ${<:.c=.o}
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(@D)
+	@clang $(FLAGS) $(INCLUDE_DIR) -c $< -o $@
+	@echo "$(YELLOW)creating object for:$(NC) $(notdir $<)"
 
 $(NAME): $(OBJ)
-	@clang  ${OBJ} ${FLAGS} -o $(NAME) -lm
-	@# sudo setcap cap_net_raw=eip ./ft_ping
-	@echo "\e[38;2;31;236;0mcompilation finished\e[38;2;255;255;255m"
+	@clang  $(OBJ) $(INCLUDE_DIR) $(FLAGS) -o $(NAME) -lm
+	@echo "$(BLUE)compilation finished$(NC)"
  
 all :
-	@echo "\e[38;2;255;222;0mcompiling $(NAME)"
-	${NAME}
+	$(NAME)
+
+setcap : $(NAME)
+	@sudo setcap cap_net_raw=eip ./ft_ping
+	@echo "$(PURPLE)$(NAME) FT_PING IS CAPABLE OF ANYTHING NOW !! $(NC)"
 
 clean:
-	@echo "\e[38;2;255;129;0m$(NAME) objects removed\e[38;2;255;255;255m"
-	@/bin/rm -f ${OBJ}
+	@rm -rf $(OBJ_DIR)
+	@echo "$(PINK)$(NAME) objects removed$(NC)"
 
 fclean: clean
-	@echo "\e[38;2;255;0;0m$(NAME) binary removed\e[38;2;255;255;255m"
-	@/bin/rm -f ${NAME}
+	@rm -f $(NAME)
+	@echo "$(PINK)$(NAME) binary removed$(NC)"
 
-re: fclean ${NAME}
+re: fclean $(NAME)
 
 .PHONY = all clean fclean re
+
+#########  COLORS  ##########
+
+BLUE = \e[38;2;102;178;255m
+PURPLE = \e[38;2;153;153;255m
+PINK = \e[38;2;255;153;204m
+YELLOW = \e[38;2;255;205;0m
+NC = \033[0;37m
+
+
+ifeq ($(VERBOSE), true)
+	FLAGS += -D VERBOSE
+endif

@@ -1,11 +1,11 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static void handle_signals(int sig);
 
 static void handle_signals(int sig){
     t_stats *stats = get_stats(TRUE, NULL);
 
-    if (sig == SIGQUIT){        // inetutils coredump and the iputils print stats so
+    if (sig == SIGQUIT){
         if(stats->nb_packets_transmitted % 2 == 0){
             print_sigquit_stats(stats);
             return;

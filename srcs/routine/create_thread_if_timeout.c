@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static void *sleep_timeout_and_send_SIGINT(void *void_conf);
 

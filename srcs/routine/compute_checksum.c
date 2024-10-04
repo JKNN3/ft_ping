@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 short compute_checksum(void *packet, int len){
     unsigned short   *tmp = packet;

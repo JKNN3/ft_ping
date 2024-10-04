@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static void    fill_payload(char *packet);
 static void    fill_icmp_msg(struct icmp *packet, t_conf *conf);

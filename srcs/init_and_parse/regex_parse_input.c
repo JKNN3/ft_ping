@@ -1,4 +1,4 @@
-#include "../../includes/ping.h"
+#include "ping.h"
 
 static int  regex_check_option(char* arg);
 static bool regex_get_and_set_boolean_value(bool *opt, char *option);
