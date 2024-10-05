@@ -1,9 +1,10 @@
-NAME	= 	ft_ping
+NAME		= 	ft_ping
 
-SRC_DIR	=	srcs
-OBJ_DIR	=	obj
-INCLUDE_DIR = -I includes
-FLAGS	=	-Wextra -Wall -Werror
+SRC_DIR		=	srcs
+OBJ_DIR		=	obj
+FLAGS		=	-Wextra -Wall -Werror
+INCLUDE_DIR 	=	 -I includes
+OBJ 		=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 SRC		= 	srcs/main.c										\
 			srcs/init_and_parse/init_structs.c				\
@@ -21,7 +22,6 @@ SRC		= 	srcs/main.c										\
 			srcs/print/print_and_update_packet_stats.c		\
 			srcs/print/print_packet_sent_dump.c				\
 
-OBJ 	=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(@D)
@@ -32,10 +32,10 @@ $(NAME): $(OBJ)
 	@clang  $(OBJ) $(INCLUDE_DIR) $(FLAGS) -o $(NAME) -lm
 	@echo "$(BLUE)compilation finished$(NC)"
  
-all :
+all:
 	$(NAME)
 
-setcap : $(NAME)
+setcap: $(NAME)
 	@sudo setcap cap_net_raw=eip ./ft_ping
 	@echo "$(PURPLE)$(NAME) FT_PING IS CAPABLE OF ANYTHING NOW !! $(NC)"
 
@@ -49,7 +49,7 @@ fclean: clean
 
 re: fclean $(NAME)
 
-.PHONY = all clean fclean re
+.PHONY = all setcap clean fclean re
 
 #########  COLORS  ##########
 
