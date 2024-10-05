@@ -30,7 +30,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 
 $(NAME): $(OBJ)
 	@clang  $(OBJ) $(INCLUDE_DIR) $(FLAGS) -o $(NAME) -lm
-	@echo "$(BLUE)compilation finished$(NC)"
+	@echo "$(GREEN)compilation finished$(NC)"
  
 all:
 	$(NAME)
@@ -53,7 +53,7 @@ re: fclean $(NAME)
 
 #########  COLORS  ##########
 
-BLUE = \e[38;2;102;178;255m
+GREEN = \e[38;2;0;128;0m
 PURPLE = \e[38;2;153;153;255m
 PINK = \e[38;2;255;153;204m
 YELLOW = \e[38;2;255;205;0m
