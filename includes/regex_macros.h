@@ -26,7 +26,7 @@
     "^(-?q)|(--quiet$)$",\
     "^--usage$",\
     "^(-?v)|(--verbose$)$",\
-    "^(-?\?$)|(--help$)$",\
+    "^(-[?]{1}\?$)|(--help$)$",\
 };
 
 # define REGEX_LIST_VALUE {\

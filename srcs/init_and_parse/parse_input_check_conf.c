@@ -10,11 +10,11 @@ bool    parse_input_check_conf(char **argv, t_conf *conf, t_stats *stats, t_opt 
     if (!regex_parse_input(argv, opt, conf))
         return FALSE;
 
-    check_if_missing_dest_ip(conf);
-    check_flood_and_interval(conf, opt);
-
     if (check_if_print_usage_or_help(opt))
         return FALSE;
+
+    check_if_missing_dest_ip(conf);
+    check_flood_and_interval(conf, opt);
 
     stats->dest_ip = inet_ntoa(conf->dest_addr.sin_addr);
     return TRUE;

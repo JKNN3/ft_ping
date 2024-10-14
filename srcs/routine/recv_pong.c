@@ -20,7 +20,6 @@ static int  receive_packet(t_conf *conf, char *packet_recv);
 static bool check_packet_received(char *packet, int bytes_recv, t_opt *opt, t_conf *conf);
 static bool check_id(char *packet, t_conf *conf);
 
-#include <curses.h>
 
 bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
 
@@ -34,10 +33,8 @@ bool recv_pong(t_conf *conf, t_stats *stats, t_opt *opt){
 
             int bytes_recv = receive_packet(conf, packet_recv);
             LOG(bytes_recv);
-            if (bytes_recv < 0){
-                // ERROR_TIMEOUT(stats->dest_ip, ntohs(((struct icmp*)&packet_recv[IP_HEADER_LEN])->icmp_seq));
+            if (bytes_recv < 0)
                 return FALSE;
-            }
             if (check_packet_received(packet_recv, bytes_recv, opt, conf))
                 print_and_update_packet_stats(stats, packet_recv, bytes_recv, opt);
             return TRUE;
@@ -68,9 +65,7 @@ static bool check_packet_received(char *packet, int bytes_recv, t_opt *opt, t_co
         PRINT_PACKET_ERR(bytes_recv - IP_HEADER_LEN, src, icmp_errors[type]);
         if (opt->verbose)
             print_packet_sent_dump(conf->packet_sent, inet_ntoa(*(struct in_addr *)&(((struct ip*)packet)->ip_dst)));
-        return FALSE;
     }
-    // check checksum
     return TRUE;
 }
 

@@ -37,7 +37,7 @@ all:
 
 setcap: $(NAME)
 	@sudo setcap cap_net_raw=eip ./ft_ping
-	@echo "$(PURPLE)$(NAME) FT_PING IS CAPABLE OF ANYTHING NOW !! $(NC)"
+	@echo "$(PURPLE)FT_PING IS CAPABLE OF ANYTHING NOW !! $(NC)"
 
 clean:
 	@rm -rf $(OBJ_DIR)
